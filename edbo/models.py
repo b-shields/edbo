@@ -21,6 +21,8 @@ from torch_utils import cv_split
 from math_utils import model_performance
 from pd_utils import to_torch
 from opt_utils import optimize_mll
+
+import warnings
     
 # Gaussian Process Model
         
@@ -160,7 +162,10 @@ class GP_Model:
         
         # Make predictions
         points = to_torch(points, gpu=self.gpu)
-        pred = self.model(points).mean.detach()
+        
+        with warnings.catch_warnings():
+            warnings.simplefilter("ignore")
+            pred = self.model(points).mean.detach()
             
         if torch.cuda.is_available() and self.gpu == True:
             pred = pred.gpu()

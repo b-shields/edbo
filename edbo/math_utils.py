@@ -28,7 +28,7 @@ class standard:
         Standardize target vector to zero mean and unit variance.
         """
     
-        if len(df) == 0:
+        if len(df) < 2:
             return df
     
         unstandard_vector = df[target].values
@@ -54,7 +54,7 @@ class standard:
         via saved mean and standard deviation.
         """
         
-        if len(df) == 0:
+        if len(df) < 2:
             return df
         
         if len(df) == len(self.unstandardized):

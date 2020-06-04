@@ -1,0 +1,5 @@
+solvent_SMILES,solvent=CCCCOC(C)=O,solvent=CC1=CC=C(C)C=C1,solvent=CCCC#N,solvent=CC(N(C)C)=O
+CCCCOC(C)=O,1,0,0,0
+CC1=CC=C(C)C=C1,0,1,0,0
+CCCC#N,0,0,1,0
+CC(N(C)C)=O,0,0,0,1

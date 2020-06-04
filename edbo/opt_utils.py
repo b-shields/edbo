@@ -90,24 +90,27 @@ def optimize_mll(model, likelihood, X, y, learning_rate=0.1,
     # Restart optimizer with random inits drawn from priors
     states = []
     loss_list = []
-
+    min_loss_list = []
     for restart in range(n_restarts + 1):
-
+        
+        step_losses = []
         # Optimization
         for i in range(training_iters):
             optimizer.zero_grad()
             output = model(X)
             loss = -mll(output, y)
+            step_losses.append(loss.item())
             loss.backward()
             optimizer.step()
 
         states.append(deepcopy(mll.model.state_dict()))
-        loss_list.append(loss.item())
+        loss_list.append(step_losses)
+        min_loss_list.append(loss.item())
     
         new_state = set_init_params(states[0], dist_dict, seed=restart)
         mll.model.load_state_dict(new_state)
 
     # Set to best state
-    mll.model.load_state_dict(states[np.argmin(loss_list)])
+    mll.model.load_state_dict(states[np.argmin(min_loss_list)])
     
     return loss_list
