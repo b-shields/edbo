@@ -8,7 +8,7 @@ from scipy.stats import norm
 import math
 from random import sample as random_sample
 
-from pd_utils import to_torch, join_to_df, argmax, complement
+from pd_utils import to_torch, join_to_df, argmax, complement, sample
 
 # Thomposon Sampling
 
@@ -51,7 +51,8 @@ class thompson_sampling:
         
         # Draw samples from posterior
         domain = to_torch(obj.domain, gpu=obj.gpu)
-        self.samples = model.sample_posterior(domain, self.batch_size)
+        self.samples = sample(model, domain, self.batch_size, gpu=obj.gpu, chunk_size=5000)
+        #self.samples = model.sample_posterior(domain, self.batch_size)
         columns = list(obj.domain.columns.values) + ['sample']
 
         # ArgMax each posterior draw

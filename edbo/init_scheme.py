@@ -268,7 +268,7 @@ def PAM(obj, batch_size, distance='gower', visualize=True,
     return medoids
 
 def k_means(obj, batch_size, visualize=True, seed=None, export_path=None,
-            n_init=1, return_clusters=False):
+            n_init=1, return_clusters=False, return_centroids=False):
     """K-Means algorithm. 
     
     k_means function returns domain points closest to the means of learned clusters.
@@ -314,11 +314,14 @@ def k_means(obj, batch_size, visualize=True, seed=None, export_path=None,
         
     # Get points closes to the cluster means
     closest = pd.DataFrame(columns=obj.domain.columns)
-    for i in range(batch_size):
+    for i in range(best):
         cluster_i = obj.domain.iloc[np.where(clusterer.labels_ == i)]
         closest_i, _ = pairwise_distances_argmin_min(clusterer.cluster_centers_[[i]], cluster_i)
         closest = pd.concat([closest, cluster_i.iloc[closest_i]], sort=False)
-        
+    
+    if return_centroids == True:
+        return closest
+    
     if len(closest) > batch_size:
         closest = closest.sample(batch_size, random_state=seed)
         

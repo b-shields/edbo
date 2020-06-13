@@ -123,6 +123,64 @@ def complement(df1, df2, rounding=False, boolean_out=False):
         return boolean
     else:
         return df1[boolean]
+
+# Sampling
+
+def chunk_sample(model, domain_tensor, batch_size, gpu=False, chunk_size=5000):
+    """
+    Sample large spaces can lead to memory issues. To deal with this
+    we can chop the space up into smaller portions, sample the posterior
+    predictive distribution, and the concatenate them. Clunky but just
+    a quick patch for now.
+    """
+    
+    # Get number of chunks and remainder
+    chunks = len(domain_tensor) // chunk_size
+    remainder = len(domain_tensor) % chunk_size
+
+    # Get samples
+    samples = pd.DataFrame()
+    for i in range(chunks):
+    
+        # Sample chunk
+        X = domain_tensor[i*chunk_size:(i+1)*chunk_size]
+        sample = model.sample_posterior(X, batch_size)
+    
+        # Torch conversion
+        if torch.cuda.is_available() and gpu == True:
+            sample = pd.DataFrame(np.array(sample.detach().cpu()))
+        else:
+            sample = pd.DataFrame(np.array(sample.detach()))
+        
+        # concatenate
+        samples = pd.concat([samples, sample], axis=1)
+    
+    # Sample last chunk
+    if remainder > 0:
+        X = domain_tensor[-remainder:]
+        sample = model.sample_posterior(X, batch_size)
+        # Torch conversion
+        if torch.cuda.is_available() and gpu == True:
+            sample = pd.DataFrame(np.array(sample.detach().cpu()))
+        else:
+            sample = pd.DataFrame(np.array(sample.detach()))
+
+        samples = pd.concat([samples, sample], axis=1)
+    
+    return to_torch(samples, gpu=gpu)
+    
+def sample(model, domain_tensor, batch_size, gpu=False, chunk_size=5000):
+    """
+    Sample posterior predictive distribution.
+    """
+    
+    # If the domain is smaller than chunk_size then don't break it up
+    if len(domain_tensor) < chunk_size:
+        samples = model.sample_posterior(domain_tensor, batch_size)  
+    else:
+        samples = chunk_sample(model, domain_tensor, batch_size, gpu=False, chunk_size=5000)
+        
+    return samples
     
 # ArgMax a set of posterior draws
         
