@@ -178,7 +178,7 @@ def sample(model, domain_tensor, batch_size, gpu=False, chunk_size=5000):
     if len(domain_tensor) < chunk_size:
         samples = model.sample_posterior(domain_tensor, batch_size)  
     else:
-        samples = chunk_sample(model, domain_tensor, batch_size, gpu=False, chunk_size=5000)
+        samples = chunk_sample(model, domain_tensor, batch_size, gpu=False, chunk_size=chunk_size)
         
     return samples
     

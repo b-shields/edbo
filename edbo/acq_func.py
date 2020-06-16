@@ -32,6 +32,7 @@ class thompson_sampling:
         
         self.batch_size = batch_size
         self.duplicates = duplicates
+        self.chunk_size = 20000
         
     def run(self, model, obj):
         """Run Thompson sampling algorithm on a trained model and user defined domain.
@@ -51,7 +52,7 @@ class thompson_sampling:
         
         # Draw samples from posterior
         domain = to_torch(obj.domain, gpu=obj.gpu)
-        self.samples = sample(model, domain, self.batch_size, gpu=obj.gpu, chunk_size=5000)
+        self.samples = sample(model, domain, self.batch_size, gpu=obj.gpu, chunk_size=self.chunk_size)
         #self.samples = model.sample_posterior(domain, self.batch_size)
         columns = list(obj.domain.columns.values) + ['sample']
 

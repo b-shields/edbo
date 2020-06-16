@@ -158,24 +158,13 @@ class random_forest(RandomForestRegressor):
 def fast_computation(fastQ):
     """Function for turning on/off GPyTorch fast computation features."""
     
-    if fastQ == True:
-        gpytorch.settings.lazily_evaluate_kernels(state=True) 
-        gpytorch.settings.fast_pred_var(state=True, num_probe_vectors=1)
-        gpytorch.settings.fast_pred_samples(state=True)
-        gpytorch.settings.fast_computations(
-                covar_root_decomposition=True, 
-                log_prob=True,
-                solves=True 
-                )
-    else:
-        gpytorch.settings.lazily_evaluate_kernels(state=False) 
-        gpytorch.settings.fast_pred_var(state=False, num_probe_vectors=1)
-        gpytorch.settings.fast_pred_samples(state=False)
-        gpytorch.settings.fast_computations(
-                covar_root_decomposition=False, 
-                log_prob=False,
-                solves=False 
-                )       
+    gpytorch.settings.fast_pred_var._state = fastQ
+    gpytorch.settings.fast_pred_samples._state = fastQ 
+    gpytorch.settings.fast_computations.covar_root_decomposition._state = fastQ
+    gpytorch.settings.fast_computations.log_prob._state = fastQ
+    gpytorch.settings.fast_computations.solves._state = fastQ
+    gpytorch.settings.deterministic_probes._state = fastQ
+    gpytorch.settings.memory_efficient._state = fastQ
     
     
     
