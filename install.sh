@@ -27,6 +27,7 @@ echo "Respond 'y' to each prompt to proceed"
 echo "#########################################"
 
 conda install -c rdkit rdkit
+conda install -c rdkit -c mordred-descriptor mordred
 conda install pandas=0.25.3 numpy=1.17.4 pytorch=1.3.1 
 conda install scikit-learn=0.22.1 
 conda install matplotlib seaborn
