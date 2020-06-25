@@ -1,3 +1,0 @@
-gpytorch==1.0.0
-pyclustering==0.9.3.1
-spyder==4.1.2
