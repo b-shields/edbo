@@ -18,26 +18,21 @@ git clone https://github.com/b-shields/edbo.git
 
 cd edbo
 
-################################################# Install rdkit
+################################################# Install some dependencies
 
-echo "Installing rdkit..."
+echo "Installing dependencies..."
 
-# rdkit
 conda install -c rdkit rdkit
-conda install jupyterlab
+conda install jupyterlab pandas=0.25.3 numpy=1.17.4 pytorch==1.3.1 scikit-learn>=0.22.1 matplotlib seaborn
+
+pip install gpytorch==1.0.0 pyclustering==0.9.3.1
 
 ################################################# Install package namespace
 
 echo "Installing edbo..."
 
-python setup.py install
+python setup.py develop
 pip install -e .
-
-################################################# Install pip
-
-#echo "Installing dependencies via pip..."
-
-#pip install -r requirements_pip.txt
 
 #################################################
 
