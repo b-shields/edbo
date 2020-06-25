@@ -5,34 +5,17 @@ Experimental Design via Bayesian Optimization
 
 0. Install conda (if you haven't already):
 
-    See https://docs.conda.io/projects/conda/en/latest/user-guide/install/
-	
-1. Copy install.sh and run from anaconda prompt:
-	
-	chmod install.sh (linux only)
-	sh install.sh	
-	
-	
-	
-	
+```bash
+https://docs.conda.io/projects/conda/en/latest/user-guide/install/
+```
 
+1. Copy install.sh to desired directory (or just copy text into a new text file called install.sh):
 
-1. Create a conda environment fro edbo:
+2. Open a terminal (linux) or anaconda prompt (windows), navigate to the directory containing install.sh:
 
-    conda create --name edbo python=3.7.5
+```bash
+cd path/to/install.sh/directory
+sh install.sh
 
-2. Clone the edbo repository:
-
-    git clone https://github.com/b-shields/edbo.git
-
-3. Install edbo:
-	
-	chmod install.sh
-	sh install.sh
-
-	# Editing
-    conda install -c rdkit rdkit
-	conda install jupyter pandas=0.25.3 numpy=1.17.4 pytorch=1.3.1 scikit-learn>=0.22.1 matplotlib seaborn
-    pip install -r requirements.txt
-
-    
+# Note: if OS is Linux based you may need to chmod install.sh
+```
