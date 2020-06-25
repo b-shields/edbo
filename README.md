@@ -17,5 +17,5 @@ https://docs.conda.io/projects/conda/en/latest/user-guide/install/
 cd path/to/install.sh/directory
 sh install.sh
 
-# Note: if OS is Linux based you may need to chmod install.sh
+# Note: if OS is Linux based you may need to chmod + install.sh
 ```
