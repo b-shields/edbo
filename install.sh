@@ -26,15 +26,12 @@ echo "Installing rdkit..."
 conda install -c rdkit rdkit
 conda install jupyterlab
 
-# rest of dependencies in requirements_conda.txt
-# while read requirement; do conda install --yes $requirement; done < requirements_conda.txt
-
 ################################################# Install package namespace
 
 echo "Installing edbo..."
 
 python setup.py install
-pip install -e
+pip install -e .
 
 ################################################# Install pip
 

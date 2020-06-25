@@ -6,7 +6,7 @@ Torch Utilities
 
 # Imports
 
-from pd_utils import to_torch
+from .pd_utils import to_torch
 import sklearn.model_selection as sklms
 import torch
 

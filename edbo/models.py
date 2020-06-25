@@ -14,15 +14,13 @@ from sklearn.model_selection import GridSearchCV
 import numpy as np
 import warnings
 
-from base_models import gp_model, random_forest
+from .base_models import gp_model, random_forest
 
-from plot_utils import pred_obs
-from torch_utils import cv_split
-from math_utils import model_performance
-from pd_utils import to_torch
-from opt_utils import optimize_mll
-
-import warnings
+from .plot_utils import pred_obs
+from .torch_utils import cv_split
+from .math_utils import model_performance
+from .pd_utils import to_torch
+from .opt_utils import optimize_mll
     
 # Gaussian Process Model
         

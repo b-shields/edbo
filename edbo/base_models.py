@@ -19,7 +19,7 @@ from  gpytorch.distributions import MultivariateNormal
 
 from sklearn.ensemble import RandomForestRegressor
 
-from pd_utils import to_torch
+from .pd_utils import to_torch
 
 # Gaussian Process model with Matern kernel
         

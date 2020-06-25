@@ -11,8 +11,7 @@ from pyclustering.utils.metric import distance_metric, type_metric
 from sklearn.cluster import KMeans
 from sklearn.metrics import pairwise_distances_argmin_min, silhouette_score
 
-from plot_utils import tsne_plot, embedding_plot
-from plot_utils import scatter_overlay
+from .plot_utils import tsne_plot, embedding_plot, scatter_overlay
 
 # Init schemes
 

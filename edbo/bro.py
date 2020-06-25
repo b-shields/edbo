@@ -7,13 +7,13 @@ import numpy as np
 
 from gpytorch.priors import GammaPrior
 
-from models import GP_Model
-from base_models import fast_computation
-from init_scheme import Init
-from objective import objective
-from acq_func import acquisition
-from plot_utils import plot_convergence
-from pd_utils import to_torch
+from .models import GP_Model
+from .base_models import fast_computation
+from .init_scheme import Init
+from .objective import objective
+from .acq_func import acquisition
+from .plot_utils import plot_convergence
+from .pd_utils import to_torch
 
 # Main class definition
 

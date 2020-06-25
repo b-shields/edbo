@@ -8,7 +8,7 @@ from scipy.stats import norm
 import math
 from random import sample as random_sample
 
-from pd_utils import to_torch, join_to_df, argmax, complement, sample
+from .pd_utils import to_torch, join_to_df, argmax, complement, sample
 
 # Thomposon Sampling
 

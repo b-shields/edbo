@@ -17,7 +17,7 @@ except:
     print('keras not installed.')
 
 from sklearn.model_selection import train_test_split
-from feature_selection import standardize, drop_single_value_columns
+from .feature_selection import standardize, drop_single_value_columns
 
 import matplotlib.pyplot as plt
 

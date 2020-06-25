@@ -4,10 +4,10 @@
 
 import pandas as pd
 
-from pd_utils import load_csv_or_excel
-from pd_utils import load_experiment_results
-from pd_utils import to_torch
-from math_utils import standard
+from .pd_utils import load_csv_or_excel
+from .pd_utils import load_experiment_results
+from .pd_utils import to_torch
+from .math_utils import standard
 
 # Objective function class
 

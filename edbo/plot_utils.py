@@ -13,9 +13,9 @@ import matplotlib
 from scipy.stats import spearmanr
 from scipy.cluster import hierarchy
 
-from math_utils import model_performance
+from .math_utils import model_performance
 
-from pd_utils import to_torch
+from .pd_utils import to_torch
 
 # Scatter plot for pred-obs
 
