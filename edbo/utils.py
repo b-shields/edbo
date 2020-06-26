@@ -7,8 +7,8 @@ import pandas as pd
 from sklearn.preprocessing import StandardScaler
 from sklearn.preprocessing import MinMaxScaler
 
-from math_utils import pca
-from chem_utils import ChemDraw
+from .math_utils import pca
+from .chem_utils import ChemDraw
 
 # Wall-clock timer for testing
 
@@ -48,7 +48,7 @@ class Data:
     def drop(self, drop_list):
         self.data = remove_features(self.data, drop_list)
     
-    def standardize(self, target='yield', scaler='standard'):
+    def standardize(self, target='yield', scaler='minmax'):
         self.data = standardize(self.data, target, scaler=scaler)
         
     def PCA(self, target='yield', n_components=1):
@@ -70,7 +70,24 @@ class Data:
         SMILES_list = index.iloc[experiment_index_value].values
         cd = ChemDraw(SMILES_list, ipython_svg=svg)
         
+        try:
+            entry = self.base_data[self.index_headers].iloc[[experiment_index_value]]
+        except:
+            entry = self.base_data.iloc[[experiment_index_value]]
+            
+        print('\n##################################################### Experiment\n\n',
+              entry,
+              '\n')
+        
         return cd.show()
+    
+    def get_experiments(self, index_values):
+        try:
+            entries = self.base_data[self.index_headers].iloc[index_values]
+        except:
+            entries = self.base_data.iloc[index_values]
+            
+        return entries
 
 # Remove columns with only a single value
 

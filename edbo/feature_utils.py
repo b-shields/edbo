@@ -9,10 +9,14 @@ Featurization utilities
 import pandas as pd
 import numpy as np
 from rdkit import Chem
+from itertools import product
+
 try:
     from mordred import Calculator, descriptors
 except:
     print('Mordred not installed.')
+    
+from .utils import Data
 
 # Calculate Mordred descriptors
 
@@ -39,10 +43,10 @@ def mordred(smiles_list, name='', dropna=False):
     descriptor_names = list(calc.descriptors)
     columns = []
     for entry in descriptor_names:
-        columns.append(name + str(entry))
+        columns.append(name + '_' + str(entry))
         
     df = pd.DataFrame(data=output, columns=columns)
-    df.insert(0, name + 'SMILES', smiles_list)
+    df.insert(0, name + '_SMILES', smiles_list)
     
     if dropna == True:
         df = df.dropna(axis=1)
@@ -73,7 +77,7 @@ def one_hot_encode(data_column, name=''):
     possible_values = list(data_column.drop_duplicates())
     
     ohe = []
-    for value in list(data_column):
+    for value in list(possible_values):
         row = one_hot_row(value, possible_values)
         ohe.append(row)
          
@@ -82,63 +86,99 @@ def one_hot_encode(data_column, name=''):
         columns.append(name + '=' + str(entry))
         
     ohe = pd.DataFrame(data=ohe, columns=columns)
-    ohe.insert(0, name + '_' + 'SMILES', possible_values)
+    ohe.insert(0, name, possible_values)
     
     return ohe
 
-# Build a descriptor matrix
+# Generate a search space
 
-def descriptor_matrix(molecule_index, lookup_table, lookup='SMILES', name=''):
+def encode_component(df_column, encoding, name=''):
     """
-    For each entry in molecule_index add the corresponding entry from the
-    lookup_table.
+    Encode a column of an experiment index data frame.
     """
     
-    # New column names
-    
-    columns = list(lookup_table.columns.values)
-    new_columns = []
-    for column in columns:
-        if name != '':
-            new_columns.append(name + '_' + str(column))
-        else:
-            new_columns.append(column)
-    
-    # Build descriptor matrix
+    if encoding == 'ohe' or encoding == 'OHE':
+        descriptor_matrix = one_hot_encode(df_column, name=name)
         
-    build = []
-    for entry in list(molecule_index):
-        match = lookup_table[lookup_table[lookup] == entry]
-        if len(match) > 0:
-            build.append(list(match.iloc[0]))
-        else:
-            build.append(np.full(len(columns),np.NaN))
+    elif encoding == 'Mordred' or encoding == 'mordred':
+        descriptor_matrix = mordred(df_column.drop_duplicates().values, 
+                                    dropna=True, 
+                                    name=name)
+    elif encoding == 'numeric' or encoding == 'Numeric':
+        descriptor_matrix = pd.DataFrame(df_column)
+    
+    return descriptor_matrix
+
+def expand_space(index, descriptor_dict):
+    """
+    Generate descriptor matrix for an experiment index and dictionary of
+    descriptors for each component.
+    """
+    
+    descriptor_matrix = pd.DataFrame()
+    
+    for col in index.columns.values:
+        
+        submatrix = descriptor_dict[col].data
+        expanded = [submatrix[submatrix.iloc[:,0] == e].values[0] for e in index[col].values]
+        df = pd.DataFrame(expanded, columns=submatrix.columns.values)
+        
+        descriptor_matrix = pd.concat([descriptor_matrix, df], axis=1)
+    
+    return descriptor_matrix
+    
+def reaction_space(component_dict, encoding = {}, clean=True, 
+                   decorrelation_threshold=0.95):
+    """
+    Build a reaction space object form component lists. 
+    """
+    
+    # Build the experiment index
+    
+    index = pd.DataFrame([row for row in product(*component_dict.values())], 
+                         columns=component_dict.keys())
+    index = index.drop_duplicates().reset_index(drop=True)
+    
+    # Build descriptor sets for individual components
+    index_headers = []
+    descriptor_dict = {}
+    for key in component_dict:
+        
+        # If there is an entry in encoding_dict follow the instruction
+        if key in encoding:
             
-    build = pd.DataFrame(data=build, columns=new_columns)
+            series = pd.Series(component_dict[key], name=key)
+            des = encode_component(series, encoding[key], name=key)
+        
+        # Otherwise one-hot-encode
+        else:
+            series = pd.Series(component_dict[key], name=key)
+            des = encode_component(series, 'ohe', name=key)
+            
+        # Initialize data container
+        des = Data(des)
     
-    return build
+        # Preprocessing
+        des.clean()
+        des.uncorrelated(threshold=decorrelation_threshold, target=None)
+        des.data.insert(0, 
+                        des.base_data.columns.values[0] + '_index', 
+                        des.base_data.iloc[:,0])
+        
+        descriptor_dict[key] = des
+        index_headers.append(des.base_data.columns.values[0] + '_index')
+    
+    # Generate index
 
-# Build a descriptor set
+    reaction = Data(expand_space(index, descriptor_dict))
+            
+    # Preprocessing
+    reaction.clean()
+    reaction.drop(['index'])
+    reaction.standardize(target=None, scaler='minmax')
     
-def build_experiment_index(index, index_list, lookup_table_list, lookup_list):
-    """
-    Build a descriptor matrix.
-    """
+    # Include descriptor_dict and index_headers
+    reaction.descriptor_dict = descriptor_dict
+    reaction.index_headers = index_headers
     
-    matrix = descriptor_matrix(index_list[0], 
-                               lookup_table_list[0], 
-                               lookup=lookup_list[0])
-    
-    matrix.insert(0, 'entry', list(index))
-    
-    for i in range(1,len(index_list)):
-        new = descriptor_matrix(index_list[i], 
-                                lookup_table_list[i], 
-                                lookup=lookup_list[i])
-        new['entry'] = list(index)
-        matrix = matrix.merge(new, on='entry')
-    
-    return matrix
-
-
-
+    return reaction    
