@@ -13,7 +13,6 @@ except:
     print('rdkit not installed.')
 
 from IPython import display
-import numpy as np
 from urllib.request import urlopen
 
 # Convert from chemical name or nickname to smiles
@@ -37,11 +36,11 @@ def name_to_smiles(name):
         smiles = urlopen(url).read().decode('utf8')
         smiles = str(smiles)
         if '</div>' in smiles:
-            return np.NaN
+            return 'FAILED'
         else:
             return smiles
     except:
-        return np.NaN
+        return 'FAILED'
 
 # 2D SMILES visualizations
 

@@ -17,6 +17,7 @@ except:
     print('Mordred not installed.')
     
 from .utils import Data
+from .chem_utils import name_to_smiles
 
 # Calculate Mordred descriptors
 
@@ -104,9 +105,82 @@ def encode_component(df_column, encoding, name=''):
         descriptor_matrix = mordred(df_column.drop_duplicates().values, 
                                     dropna=True, 
                                     name=name)
+        
+        if len(descriptor_matrix.columns.values) == 1:
+            
+            print('\nedbo bot: Mordred failed to encode one or more SMILES strings in ' + name + '.',
+                  'Would you like to one-hot-encode instead?')
+            response = input('~ ')
+            
+            if response == 'yes' or response == 'Yes' or response == 'y': 
+                print('\nedbo bot: OK one-hot-encoding ' + name + '...' )
+                descriptor_matrix = one_hot_encode(df_column, name=name)
+                
+            else:
+                print('\nedbo bot: Identifying problematic SMILES strings...')
+                print('\nedbo bot: Mordred failed with the following strings:')
+                
+                i = 0
+                for entry in df_column.values:
+                    row = mordred([entry], dropna=True, name=name)
+                    if len(row.iloc[0]) == 1:
+                        print('(' + str(i) + ')  ', entry)
+                    i += 1
+                        
+                print('\nedbo bot: ' + name + ' was removed from the reaction space.',
+                      'Resolve issues with SMILES strings and try again.')
+        
     elif encoding == 'numeric' or encoding == 'Numeric':
         descriptor_matrix = pd.DataFrame(df_column)
     
+    elif encoding == 'resolve' or encoding == 'Resolve':
+        
+        names = df_column.drop_duplicates().values
+        smiles = pd.Series([name_to_smiles(s) for s in names], name=name)
+        new_smiles = np.array(smiles.values)
+        
+        if 'FAILED' in smiles.values:
+            
+            failed = np.argwhere(np.array(smiles) == 'FAILED').flatten()
+            
+            print('\nedbo bot: the following names could not be resolved:')
+            for name_i, i in zip(np.array(names)[failed], failed):
+                print('(' + str(i) + ')  ', name_i)
+                
+            print('\nedbo bot: would you like to enter SMILES or one-hot-encode this component?')
+            response = input('~ ')
+            if response == 'Yes' or response == 'yes' or response == 'y':
+                print('\nedbo bot: OK which would you like to try (smiles or ohe)?')
+                response = input('~ ')
+            elif response != 'no' and response != 'No' and response != 'ohe' and response != 'smiles':
+                print('\nedbo bot: I didn\'t understand, smiles or ohe?')
+                response = input('~ ')
+            
+            if response == 'smiles' or response == 'SMILES':
+                for i in failed:
+                    name_i = names[i]
+                    print('\nedbo bot: SMILES string for ' + name_i + '?')
+                    response = input('~ ')
+                    new_smiles[i] = response
+                
+                print('\nedbo bot: OK computing Mordred descriptors for ' + name + '...' )
+                descriptor_matrix = encode_component(pd.Series(new_smiles, name=df_column.name),
+                                             'mordred', 
+                                             name=name)
+                
+            elif response == 'ohe':
+                print('\nedbo bot: OK one-hot-encoding ' + name + '...' )
+                descriptor_matrix = one_hot_encode(df_column, name=name)
+            
+            else:
+                print('\nedbo bot: ' + name + ' was removed from the reaction space.',
+                      'Resolve issues with name and try again.')
+                descriptor_matrix = pd.DataFrame(df_column)
+        else:
+            descriptor_matrix = encode_component(pd.Series(new_smiles, name=df_column.name),
+                                             'mordred', 
+                                             name=name)
+            
     return descriptor_matrix
 
 def expand_space(index, descriptor_dict):
@@ -133,15 +207,10 @@ def reaction_space(component_dict, encoding = {}, clean=True,
     Build a reaction space object form component lists. 
     """
     
-    # Build the experiment index
-    
-    index = pd.DataFrame([row for row in product(*component_dict.values())], 
-                         columns=component_dict.keys())
-    index = index.drop_duplicates().reset_index(drop=True)
-    
     # Build descriptor sets for individual components
     index_headers = []
     descriptor_dict = {}
+    final_component_dict = {}
     for key in component_dict:
         
         # If there is an entry in encoding_dict follow the instruction
@@ -160,16 +229,26 @@ def reaction_space(component_dict, encoding = {}, clean=True,
     
         # Preprocessing
         des.clean()
-        des.uncorrelated(threshold=decorrelation_threshold, target=None)
+        try:
+            des.uncorrelated(threshold=decorrelation_threshold, target=None)
+        except:
+            None
         des.data.insert(0, 
                         des.base_data.columns.values[0] + '_index', 
                         des.base_data.iloc[:,0])
         
         descriptor_dict[key] = des
+        final_component_dict[key] = des.data.iloc[:,0].values
         index_headers.append(des.base_data.columns.values[0] + '_index')
     
-    # Generate index
-
+    # Build the experiment index
+        
+    index = pd.DataFrame([row for row in product(*final_component_dict.values())], 
+                         columns=final_component_dict.keys())
+    index = index.drop_duplicates().reset_index(drop=True)
+    
+    # Generate encoded index
+    
     reaction = Data(expand_space(index, descriptor_dict))
             
     # Preprocessing
@@ -178,7 +257,7 @@ def reaction_space(component_dict, encoding = {}, clean=True,
     reaction.standardize(target=None, scaler='minmax')
     
     # Include descriptor_dict and index_headers
-    reaction.descriptor_dict = descriptor_dict
+    reaction.descriptors = descriptor_dict
     reaction.index_headers = index_headers
     
     return reaction    

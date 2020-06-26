@@ -14,6 +14,8 @@ from .objective import objective
 from .acq_func import acquisition
 from .plot_utils import plot_convergence
 from .pd_utils import to_torch
+from .chem_utils import ChemDraw
+from .feature_utils import reaction_space
 
 # Main class definition
 
@@ -393,9 +395,125 @@ class BO:
         
         sort = self.obj.results_input().sort_values(self.obj.target, ascending=False)
         return sort.head()
+        
+class BO_express(BO):
+    """Quick method for calling Bayesian optimization algorithm.
     
+    Class provides a unified framework for selecting experimental 
+    conditions for the parallel optimization of chemical reactions
+    and for the simulation of known objectives.
+    """
     
+    def __init__(self, 
+                 reaction_components={}, encoding={},
+                 model=GP_Model, acquisition_function='EI', init_method='rand', 
+                 target=-1, batch_size=5, computational_objective=None):
+        
+        # Build the search space
+        self.reaction = reaction_space(reaction_components, encoding=encoding)
+        
+        # Determine appropriate priors
+        mordred = False
+        for header in self.reaction.index_headers:
+            if 'SMILES' in header:
+                mordred = True
+                break
+        if mordred:
+            if len(self.reaction.data.columns.values) < 50:
+                mordred = False
+                
+        if mordred:
+            lengthscale_prior = [GammaPrior(2.0, 0.1), 10.0]
+            outputscale_prior = [GammaPrior(2.0, 0.1), 10.0]
+            noise_prior = [GammaPrior(1.5, 0.1), 5.0]
+        else:
+            lengthscale_prior = [GammaPrior(3.0, 1.0), 2.0]
+            outputscale_prior = [GammaPrior(5.0, 0.2), 20.0]
+            noise_prior = [GammaPrior(1.5, 0.1), 5.0]
+        
+        super(BO_express, self).__init__(domain=self.reaction.data,
+                                         model=model, 
+                                         acquisition_function=acquisition_function,
+                                         init_method=init_method,
+                                         target=target,
+                                         batch_size=batch_size,
+                                         computational_objective=computational_objective,
+                                         lengthscale_prior=lengthscale_prior,
+                                         outputscale_prior=outputscale_prior,
+                                         noise_prior=noise_prior)
+        
+        
+    def get_experiments(self, structures=False):
+        """
+        Retrieve proposed experiments and print structures for any SMILES
+        encoded components.
+        """
+        
+        # Index entries
+        experiments = self.reaction.get_experiments(self.proposed_experiments.index.values)
+        
+        # SMILES columns
+        smiles_cols = []
+        for col in experiments.columns.values:
+            if 'SMILES' in col:
+                smiles_cols.append(col)
+        
+        if structures:
+            for experiment in experiments[smiles_cols].values:
+                cdx = ChemDraw(experiment)
+                cdx.show()
+                
+        return experiments
     
+    def add_results(self, results_path=None):
+        """
+        Include experimental results input in a CSV file.
+        """
+        
+        if results_path != None:
+            results = pd.read_csv(results_path, index_col=0).dropna(axis=0)
+        
+        else:
+            print('\nedbo bot: No path to <results>.csv was specified.'
+                  '\nedbo bot: Exporting experiment domain to CSV file...')
+            
+            self.reaction.base_data[self.reaction.index_headers].to_csv('results.csv', 
+                                                                        index=True)
+            
+            print('edbo bot: Include your results column at the right and save the file.',
+                  '\nedbo bot: Let me know when you are done...')
+            input('~ ')
+            
+            results = pd.read_csv('results.csv', index_col=0).dropna(axis=0)
+        
+        result_descriptors = self.obj.domain.iloc[results.index.values]
+        results = pd.concat([result_descriptors, results.iloc[:,[-1]]], axis=1)
+        
+        # Initialize data container
+        self.obj = objective(domain=self.obj.domain,
+                             results=results, 
+                             exindex=self.obj.exindex,
+                             gpu=self.obj.gpu,
+                             computational_objective=self.obj.computational_objective)
+        
+    def export_proposed(self, path=None):
+        """
+        Export a pandas dataframe with proposed experiments.
+        """
+            
+        index = self.proposed_experiments.index.values
+        proposed = self.reaction.base_data[self.reaction.index_headers].iloc[index]
+        target = pd.DataFrame([['<Enter Response>']] * len(proposed), 
+                              columns=[self.obj.target],
+                              index=index)
+        proposed = pd.concat([proposed, target], axis=1)
+            
+        if path == None:
+            proposed.to_csv('experiments.csv')
+                
+        else:
+            proposed.to_csv(path)
+            
     
     
     

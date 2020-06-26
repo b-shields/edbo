@@ -157,7 +157,7 @@ def rand(obj, batch_size, seed=None):
         
     batch = obj.domain.sample(
             n=batch_size, 
-            random_state=seed).reset_index(drop=True)
+            random_state=seed)
         
     return batch
 
