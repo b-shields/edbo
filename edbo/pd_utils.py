@@ -89,6 +89,22 @@ def to_torch(data, gpu=False):
     
     return torch_data
 
+def torch_to_numpy(data, gpu=False):
+    """
+    Convert from torch.tensor to a numpy.array.
+    """
+    
+    # Torch conversion
+    if torch.cuda.is_available() and gpu == True:
+        out = np.array(data.detach().cpu())
+    else:
+        try:
+            out = np.array(data.detach())
+        except:
+            out = np.array(data)
+        
+    return out
+
 # Complement of two dataframes
 
 def complement(df1, df2, rounding=False, boolean_out=False):

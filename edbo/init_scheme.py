@@ -331,11 +331,14 @@ def k_means(obj, batch_size, visualize=True, seed=None, export_path=None,
         tsne_data = obj.domain.copy()
         tsne_data['label'] = labels
         
-        embedding_plot(
-                    tsne_data.drop('label',axis=1),
-                    labels=tsne_data['label'].values.tolist(),
-                    export_path=export_path
-                    )
+        if len(tsne_data.iloc[0]) > 2:
+        
+            embedding_plot(
+                        tsne_data.drop('label',axis=1),
+                        labels=tsne_data['label'].values.tolist(),
+                        export_path=export_path
+                        )
+            
     if return_clusters == True:
         return cluster_labels
                     

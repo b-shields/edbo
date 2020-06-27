@@ -122,7 +122,29 @@ class top_predicted:
                 top_n=self.batch_size)
         
         return proposed.drop('pred', axis=1)
+
+def mean(model, obj, **kwargs):
+    """Compute model mean.
+        
+    Parameters
+    ----------
+    model : bro.models
+        Trained model.
+    obj : bro.objective 
+        Objective object containing information about the domain.
+    jitter : float
+        Parameter which controls the degree of exploration.
+        
+    Returns
+    ----------
+    numpy.array 
+        Computed mean at each domain point.
+    """
+        
+    pred = np.array(model.predict(obj.domain))
     
+    return pred
+
 # Max variance
 
 class max_variance:
@@ -176,6 +198,29 @@ class max_variance:
         self.variance = var['var'].values
         
         return proposed.drop('var', axis=1)
+
+
+def variance(model, obj, **kwargs):
+    """Compute model variance.
+        
+    Parameters
+    ----------
+    model : bro.models
+        Trained model.
+    obj : bro.objective 
+        Objective object containing information about the domain.
+    jitter : float
+        Parameter which controls the degree of exploration.
+        
+    Returns
+    ----------
+    numpy.array 
+        Computed variance at each domain point.
+    """
+        
+    var = np.array(model.variance(obj.domain))
+    
+    return var
 
 # Expected Improvement (EI)
 
@@ -760,11 +805,15 @@ class acquisition:
         elif function == 'MeanMax-TS':
             self.function = hybrid_TS('MeanMax', batch_size, duplicates)
         elif function == 'VarMax-TS':
-            self.function = hybrid_TS('VarMax', batch_size, duplicates)
+            self.function = hybrid_TS('VarMax', batch_size, duplicates)   
         elif function == 'MeanMax':
-            self.function = top_predicted(batch_size, duplicates)
+            self.function = Kriging_believer(mean, 
+                                             batch_size, 
+                                             duplicates)
         elif function == 'VarMax':
-            self.function = max_variance(batch_size, duplicates)
+            self.function = Kriging_believer(variance, 
+                                             batch_size, 
+                                             duplicates)
         elif function == 'rand':
             self.function = random(batch_size, duplicates)
         elif function == 'eps-greedy':

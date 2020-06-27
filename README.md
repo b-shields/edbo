@@ -19,3 +19,5 @@ sh install.sh
 
 # Note: if OS is Linux based you may need to chmod + install.sh
 ```
+
+3. (optional) Test edbo. See tests directory for detials.

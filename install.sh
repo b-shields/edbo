@@ -26,13 +26,15 @@ echo "-----------------------------------------"
 echo "Respond 'y' to each prompt to proceed"
 echo "#########################################"
 
-conda install -c rdkit rdkit
-conda install -c rdkit -c mordred-descriptor mordred
-conda install pandas=0.25.3 numpy=1.17.4 pytorch=1.3.1 
-conda install scikit-learn=0.22.1 
-conda install matplotlib seaborn
+conda install -y -c rdkit rdkit
+conda install -y -c rdkit -c mordred-descriptor mordred
+conda install -y pandas=0.25.3 numpy=1.17.4 
+conda install -y pytorch=1.3.1 cudatoolkit=10.1 torchvision -c pytorch
+conda install -y scikit-learn=0.22.1
+conda install -y matplotlib seaborn
 
 pip install gpytorch==1.0.0 pyclustering==0.9.3.1
+pip3 install pyro-ppl==1.1
 
 ################################################# Install package namespace
 
@@ -42,7 +44,7 @@ python setup.py develop
 
 ################################################# Install an editor
 
-conda install jupyterlab
+conda install -y jupyterlab
 
 #################################################
 

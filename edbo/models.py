@@ -215,6 +215,8 @@ class GP_Model:
             Function values at points for samples.
         """
         
+        points = to_torch(points, gpu=self.gpu)
+        
         # Get into evaluation mode
         self.model.eval()
         self.likelihood.eval()
@@ -385,6 +387,9 @@ class RF_Model:
             Weak estimator predictions at points.
         """
         
+        # Make sure points in a numpy array
+        X = np.array(X)
+        
         n_estimators = self.model.n_estimators
         trees = np.random.choice(range(n_estimators), 
                                 size=batch_size, 
@@ -414,6 +419,9 @@ class RF_Model:
         numpy.array
             Ensemble variance at points.
         """
+        
+        # Make sure points in a numpy array
+        points = np.array(points)
         
         n_estimators = self.model.n_estimators
         
