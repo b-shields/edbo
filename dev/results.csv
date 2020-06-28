@@ -1,0 +1,11 @@
+,aryl_halide_SMILES_index,base_SMILES_index,solvent_SMILES_index,ligand_SMILES_index,concentration_index,temperature_index,yield
+3603,Ic1ccccc1,[K+].[K+].[K+].[O-][P]([O-])([O-])=O,Cc1ccccc1,C1CCC(P(CCCP(C2CCCCC2)C2CCCCC2)C2CCCCC2)CC1,0.2,20,1
+1467,Clc1ccccc1,[K+].[K+].[K+].[O-][P]([O-])([O-])=O,Cc1ccccc1,CCP(CC)CC,0.1,20,1
+3196,Ic1ccccc1,[K+].[K+].[O-]C([O-])=O,Cc1ccccc1,CCP(CC)CC,0.1,30,0
+5875,Brc1ccccc1,[K+].[K+].[K+].[O-][P]([O-])([O-])=O,C[S](C)=O,C1CCC(P(CCCP(C2CCCCC2)C2CCCCC2)C2CCCCC2)CC1,0.3,30,0
+2701,Ic1ccccc1,CN1CCCN2CCCN=C12,Cc1ccccc1,c1ccc(P(c2ccccc2)c2ccccc2)cc1,0.1,30,50
+2720,Ic1ccccc1,CN1CCCN2CCCN=C12,Cc1ccccc1,c1ccc(CP(Cc2ccccc2)Cc2ccccc2)cc1,0.1,40,20
+82,Clc1ccccc1,C1CCN2CCCN=C2CC1,C1CCOC1,CC1(P(C2CCCCC2)C2CCCCC2)CC1(c1ccccc1)c1ccccc1,0.1,30,3
+1881,Clc1ccccc1,[K+].CC(C)(C)[O-],Cc1ccccc1,CC(C)c1cc(C(C)C)c(-c2ccccc2P(C(C)(C)C)C(C)(C)C)c(C(C)C)c1,0.1,20,0
+848,Clc1ccccc1,CN1CCCN2CCCN=C12,CN(C)C(C)=O,P(C1=CC=CC=C1)(C2CCCCC2)C3=CC=CC=C3,0.1,40,0
+3304,Ic1ccccc1,[K+].[K+].[O-]C([O-])=O,C[S](C)=O,CCP(CC)CC,0.1,30,10
