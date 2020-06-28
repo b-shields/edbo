@@ -16,7 +16,7 @@ try:
 except:
     print('Mordred not installed.')
     
-from .utils import Data
+from .utils import Data, bot
 from .chem_utils import name_to_smiles
 
 # Calculate Mordred descriptors
@@ -98,6 +98,12 @@ def encode_component(df_column, encoding, name=''):
     Encode a column of an experiment index data frame.
     """
     
+    # Spawn a bot to deal with issues
+    
+    edbo_bot = bot()
+    
+    # Encode components
+    
     if encoding == 'ohe' or encoding == 'OHE':
         descriptor_matrix = one_hot_encode(df_column, name=name)
         
@@ -106,19 +112,25 @@ def encode_component(df_column, encoding, name=''):
                                     dropna=True, 
                                     name=name)
         
+        # Issue: Mordred didn't encode all SMILES strings
+        
         if len(descriptor_matrix.columns.values) == 1:
             
-            print('\nedbo bot: Mordred failed to encode one or more SMILES strings in ' + name + '.',
-                  'Would you like to one-hot-encode instead?')
-            response = input('~ ')
+            # Resolve issue using edbo bot
             
-            if response == 'yes' or response == 'Yes' or response == 'y': 
-                print('\nedbo bot: OK one-hot-encoding ' + name + '...' )
-                descriptor_matrix = one_hot_encode(df_column, name=name)
-                
-            else:
-                print('\nedbo bot: Identifying problematic SMILES strings...')
-                print('\nedbo bot: Mordred failed with the following strings:')
+            question = 'Mordred failed to encode one or more SMILES strings in '
+            question += name + '. Would you like to one-hot-encode instead?'
+            question_root = 'would you like to one-hot-encode?'
+            triggers = ['ohe', 'y', 'one']
+            not_triggers = ['smi', 'no']
+            
+            def response():
+                edbo_bot.talk('OK one-hot-encoding ' + name + '...')
+                return one_hot_encode(df_column, name=name)
+            
+            def not_response():
+                edbo_bot.talk('Identifying problematic SMILES string(s)...')
+                edbo_bot.talk('Mordred failed with the following string(s):')
                 
                 i = 0
                 for entry in df_column.values:
@@ -126,56 +138,71 @@ def encode_component(df_column, encoding, name=''):
                     if len(row.iloc[0]) == 1:
                         print('(' + str(i) + ')  ', entry)
                     i += 1
-                        
-                print('\nedbo bot: ' + name + ' was removed from the reaction space.',
-                      'Resolve issues with SMILES strings and try again.')
+                    
+                edbo_bot.talk(name + ' was removed from the reaction space.' +
+                              ' Resolve issues with SMILES string(s) and try again.')
+                
+                return descriptor_matrix
+
+            descriptor_matrix = edbo_bot.resolve(question, 
+                                                 question_root, 
+                                                 triggers, 
+                                                 not_triggers, 
+                                                 response, 
+                                                 not_response)
         
     elif encoding == 'numeric' or encoding == 'Numeric':
         descriptor_matrix = pd.DataFrame(df_column)
     
     elif encoding == 'resolve' or encoding == 'Resolve':
         
+        # Resolve names using NIH database
+        
         names = df_column.drop_duplicates().values
         smiles = pd.Series([name_to_smiles(s) for s in names], name=name)
         new_smiles = np.array(smiles.values)
+        
+        # Issue couldn't resolve some of the names
         
         if 'FAILED' in smiles.values:
             
             failed = np.argwhere(np.array(smiles) == 'FAILED').flatten()
             
-            print('\nedbo bot: the following names could not be resolved:')
+            # Resolve issue using edbo bot
+            edbo_bot.talk('The following names could not be converted to SMILES strings:')
             for name_i, i in zip(np.array(names)[failed], failed):
                 print('(' + str(i) + ')  ', name_i)
-                
-            print('\nedbo bot: would you like to enter SMILES or one-hot-encode this component?')
-            response = input('~ ')
-            if response == 'Yes' or response == 'yes' or response == 'y':
-                print('\nedbo bot: OK which would you like to try (smiles or ohe)?')
-                response = input('~ ')
-            elif response != 'no' and response != 'No' and response != 'ohe' and response != 'smiles':
-                print('\nedbo bot: I didn\'t understand, smiles or ohe?')
-                response = input('~ ')
             
-            if response == 'smiles' or response == 'SMILES':
+            question = 'Would you like to enter a SMILES string or one-hot-encode this component?'
+            question_root = 'which would you like to try (smiles or ohe)?'
+            triggers = ['ohe', 'one']
+            not_triggers = ['smi']
+            
+            def response():
+                edbo_bot.talk('OK one-hot-encoding ' + name + '...')
+                return one_hot_encode(df_column, name=name)
+            
+            def not_response():
+                
                 for i in failed:
                     name_i = names[i]
-                    print('\nedbo bot: SMILES string for ' + name_i + '?')
-                    response = input('~ ')
-                    new_smiles[i] = response
+                    text = edbo_bot.get_response('SMILES string for ' + name_i + '?')
+                    new_smiles[i] = text
                 
-                print('\nedbo bot: OK computing Mordred descriptors for ' + name + '...' )
+                edbo_bot.talk('OK computing Mordred descriptors for ' + name + '...')
                 descriptor_matrix = encode_component(pd.Series(new_smiles, name=df_column.name),
                                              'mordred', 
                                              name=name)
                 
-            elif response == 'ohe':
-                print('\nedbo bot: OK one-hot-encoding ' + name + '...' )
-                descriptor_matrix = one_hot_encode(df_column, name=name)
+                return descriptor_matrix
+
+            descriptor_matrix = edbo_bot.resolve(question, 
+                                                 question_root, 
+                                                 triggers, 
+                                                 not_triggers, 
+                                                 response, 
+                                                 not_response)
             
-            else:
-                print('\nedbo bot: ' + name + ' was removed from the reaction space.',
-                      'Resolve issues with name and try again.')
-                descriptor_matrix = pd.DataFrame(df_column)
         else:
             descriptor_matrix = encode_component(pd.Series(new_smiles, name=df_column.name),
                                              'mordred', 
@@ -193,20 +220,26 @@ def expand_space(index, descriptor_dict):
     
     for col in index.columns.values:
         
-        submatrix = descriptor_dict[col].data
-        expanded = [submatrix[submatrix.iloc[:,0] == e].values[0] for e in index[col].values]
-        df = pd.DataFrame(expanded, columns=submatrix.columns.values)
+        submatrix = descriptor_dict[col].data.values
+        expanded = [submatrix[submatrix[:,0] == e][0] for e in index[col].values]
+        df = pd.DataFrame(expanded, columns=descriptor_dict[col].data.columns.values)
         
         descriptor_matrix = pd.concat([descriptor_matrix, df], axis=1)
     
     return descriptor_matrix
     
-def reaction_space(component_dict, encoding = {}, clean=True, 
-                   decorrelation_threshold=0.95):
+def reaction_space(component_dict, encoding = {}, clean=True,
+                   decorrelation_threshold=0.9):
     """
     Build a reaction space object form component lists. 
     """
     
+    if component_dict == {}:
+        reaction = Data(pd.DataFrame())
+        reaction.descriptors = {}
+        reaction.index_headers = []
+        return reaction
+        
     # Build descriptor sets for individual components
     index_headers = []
     descriptor_dict = {}

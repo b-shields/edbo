@@ -4,7 +4,7 @@
 
 echo "Creating conda environment..."
 
-conda create --name edbo python=3.7.5
+conda create -y --name edbo python=3.7.5
 
 # get into environment
 eval "$(conda shell.bash hook)"

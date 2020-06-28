@@ -193,3 +193,124 @@ def uncorrelated_features(df, target, threshold=0.95):
         data[target] = list(df[target])
     
     return data
+
+# edbo bot
+
+class bot:
+    """
+    Bot class to be used for helping users resolve issues.
+    """
+    
+    def __init__(self, name='edbo bot'):
+        
+        self.name = name
+        
+    def talk(self, text):
+        """Print out text."""
+        
+        print('\n' + self.name + ': ' + text)
+        
+    def get_response(self, question):
+        """Ask a question and wait for a response."""
+        
+        self.talk(question)
+        text = input('~ ')
+        return text
+        
+    def parse(self, text, triggers, not_triggers):
+        """Parse response text for triggers/not_triggers."""
+        
+        # Test for trigger substrings
+        bool_ = [True if t in text.lower() else False for t in triggers]
+        
+        # Test for anti-trigger substrings
+        bool_not = [True if t in text.lower() else False for t in not_triggers]
+        
+        if True in bool_ and True not in bool_not:
+            return True
+        elif True not in bool_ and True not in bool_not:
+            return 'Resolve'
+        else:
+            return False
+        
+    def multi_parse(self, text, trigger_dict):
+        """Parse text for a number of responses."""
+        
+        # Test for triggers in substrings
+        triggered = []
+        for key in trigger_dict:
+            bool_ = [True if t in text.lower() else False for t in trigger_dict[key]]
+            if True in bool_:
+                triggered.append(key)
+                
+        return triggered
+        
+    def parse_respond(self, text, triggers, not_triggers, response, not_response):
+        """Parse response text for triggers/not_triggers and then respond."""
+        
+        check = self.parse(text, triggers, not_triggers)
+        
+        if check == 'Resolve':
+            return 'Resolve'
+        elif check:
+            return response()
+        else:
+            return not_response()
+        
+    def resolve(self, question, question_root, triggers, not_triggers, response, not_response):
+        """Resolve a boolean issue"""
+        
+        # Ask initial question and get response
+        text = self.get_response(question)
+        
+        # Parse the response text        
+        out = self.parse_respond(text, triggers, not_triggers, response, not_response)
+        
+        # Resolve if necessary
+        while str(type(out)) == str(type('Resolve')) and out == 'Resolve':
+            text_ = self.get_response('I didn\'t understand, ' + question_root)
+            out = self.parse_respond(text_, triggers, not_triggers, response, not_response)
+            
+        return out
+    
+    def resolve_direct(self, question, trigger_dict, response_dict, print_dict, confirm_dict):
+        """Resolve an issue with triggers and responses defined in dicts"""
+        
+        # Ask initial question and get response
+        text = self.get_response(question)
+        
+        # Parse the response text        
+        triggered = self.multi_parse(text, trigger_dict)
+        
+        while len(triggered) != 1:
+            
+            if len(triggered) == 0:
+                text = self.get_response('I\'m not sure I can help you with that, rephrase or check the documentation. To exit type "exit"')
+                triggered = self.multi_parse(text, trigger_dict)
+                
+            else:
+                question = 'Can you clarify: '
+                for t in triggered:
+                    question += t + ', '
+                question += 'or exit?'
+                text = self.get_response(question)
+                triggered = self.multi_parse(text, trigger_dict)
+        
+        # See if the question needs confirmation
+        if triggered[0] in confirm_dict:
+            text = self.get_response(confirm_dict[triggered[0]])
+                
+            if 'y' in text.lower():
+                # Trigger appropriate response
+                if triggered[0] in print_dict:
+                    self.talk(print_dict[triggered[0]])
+                return response_dict[triggered[0]]()
+            else:
+                return None
+        else:
+            if triggered[0] in print_dict:
+                self.talk(print_dict[triggered[0]])
+            return response_dict[triggered[0]]()
+        
+
+

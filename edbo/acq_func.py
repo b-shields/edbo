@@ -74,7 +74,7 @@ class thompson_sampling:
 # Top predictions
 
 class top_predicted:
-    """Class represents the pure exploitation algorithm.
+    """Class represents the batched pure exploitation algorithm.
     
     Provides a framework for selecting experimental conditions for parallel 
     optimization via the top predicted values.
@@ -124,7 +124,7 @@ class top_predicted:
         return proposed.drop('pred', axis=1)
 
 def mean(model, obj, **kwargs):
-    """Compute model mean.
+    """Compute model mean for Kriging believer pure exploitation.
         
     Parameters
     ----------
@@ -148,7 +148,7 @@ def mean(model, obj, **kwargs):
 # Max variance
 
 class max_variance:
-    """Class represents the pure exploration algorithm.
+    """Class represents the batched pure exploration algorithm.
     
     Provides a framework for selecting experimental conditions for parallel 
     optimization via domain points with the highest model variance.
@@ -201,7 +201,7 @@ class max_variance:
 
 
 def variance(model, obj, **kwargs):
-    """Compute model variance.
+    """Compute model variance for Kriging believer pure exploration.
         
     Parameters
     ----------

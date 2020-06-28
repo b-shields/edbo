@@ -30,7 +30,9 @@ def name_to_smiles(name):
     ----------
     (str) SMILES corresponding to chemical name.
     """
-
+    
+    name = name.replace(' ', '%20')
+    
     try:
         url = 'http://cactus.nci.nih.gov/chemical/structure/' + name + '/smiles'
         smiles = urlopen(url).read().decode('utf8')

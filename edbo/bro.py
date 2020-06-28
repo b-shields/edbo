@@ -5,6 +5,8 @@
 import pandas as pd
 import numpy as np
 
+import pickle
+
 from gpytorch.priors import GammaPrior
 
 from .models import GP_Model
@@ -16,6 +18,7 @@ from .plot_utils import plot_convergence
 from .pd_utils import to_torch
 from .chem_utils import ChemDraw
 from .feature_utils import reaction_space
+from .utils import bot
 
 # Main class definition
 
@@ -395,6 +398,44 @@ class BO:
         
         sort = self.obj.results_input().sort_values(self.obj.target, ascending=False)
         return sort.head()
+    
+    # Save BO instance
+    def save(self, path='BO.pkl'):
+        """Save BO state.
+        
+        Parameters
+        ----------
+        path : str 
+            Path to export <BO state dict>.pkl.
+        
+        Returns
+        ----------
+        None.
+        """ 
+        
+        file = open(path, 'wb')
+        pickle.dump(self.__dict__, file)
+        file.close()
+    
+    # Load BO instance
+    def load(self, path='BO.pkl'):
+        """Load BO state.
+        
+        Parameters
+        ----------
+        path : str 
+            Path to <BO state dict>.pkl.
+        
+        Returns
+        ----------
+        None.
+        """ 
+        
+        file = open(path, 'rb')
+        tmp_dict = pickle.load(file)
+        file.close()          
+
+        self.__dict__.update(tmp_dict) 
         
 class BO_express(BO):
     """Quick method for calling Bayesian optimization algorithm.
@@ -404,11 +445,22 @@ class BO_express(BO):
     and for the simulation of known objectives.
     """
     
-    def __init__(self, 
+    def __init__(self,
                  reaction_components={}, encoding={},
                  model=GP_Model, acquisition_function='EI', init_method='rand', 
                  target=-1, batch_size=5, computational_objective=None):
         
+        # Initialize edbo_bot
+        self.edbo_bot = bot()
+        
+        # Check the input
+        if len(reaction_components) > 0:
+            N = 1
+            for key in reaction_components:
+                N *= len(reaction_components[key])
+            
+            self.edbo_bot.talk('Building ' + str(N) + ' experiment reaction space...')
+
         # Build the search space
         self.reaction = reaction_space(reaction_components, encoding=encoding)
         
@@ -422,6 +474,10 @@ class BO_express(BO):
             if len(self.reaction.data.columns.values) < 50:
                 mordred = False
                 
+        if len(self.reaction.data.columns.values) < 5:
+            lengthscale_prior = [GammaPrior(1.3, 0.5), 0.5]
+            outputscale_prior = [GammaPrior(5.0, 0.2), 20.0]
+            noise_prior = [GammaPrior(1.5, 0.1), 5.0]
         if mordred:
             lengthscale_prior = [GammaPrior(2.0, 0.1), 10.0]
             outputscale_prior = [GammaPrior(2.0, 0.1), 10.0]
@@ -440,7 +496,8 @@ class BO_express(BO):
                                          computational_objective=computational_objective,
                                          lengthscale_prior=lengthscale_prior,
                                          outputscale_prior=outputscale_prior,
-                                         noise_prior=noise_prior)
+                                         noise_prior=noise_prior,
+                                         fast_comp=True)
         
         
     def get_experiments(self, structures=False):
@@ -474,16 +531,13 @@ class BO_express(BO):
             results = pd.read_csv(results_path, index_col=0).dropna(axis=0)
         
         else:
-            print('\nedbo bot: No path to <results>.csv was specified.'
-                  '\nedbo bot: Exporting experiment domain to CSV file...')
-            
+            self.edbo_bot.talk('No path to <results>.csv was specified.')
+            self.edbo_bot.talk('Exporting experiment domain to CSV file...')
             self.reaction.base_data[self.reaction.index_headers].to_csv('results.csv', 
                                                                         index=True)
             
-            print('edbo bot: Include your results column at the right and save the file.',
-                  '\nedbo bot: Let me know when you are done...')
-            input('~ ')
-            
+            self.edbo_bot.talk('Include your results column at the right and save the file.')
+            self.edbo_bot.get_response('Let me know when you are done...')
             results = pd.read_csv('results.csv', index_col=0).dropna(axis=0)
         
         result_descriptors = self.obj.domain.iloc[results.index.values]
@@ -513,8 +567,90 @@ class BO_express(BO):
                 
         else:
             proposed.to_csv(path)
+    
+    def help(self):
+        """
+        Run edbo bot to help with tasks.
+        """
+        
+        # Keywords which trigger responses
+        trigger_dict = {'exit':['exit', 'stop'],
+                'initialize':['init', 'start'],
+                'optimize':['opt', 'run', 'bo', 'next'],
+                'print proposed':['print', 'next', 'choic', 'choice', 'exper'],
+                'add results':['load', 'add', 'results', 'data'],
+                'check model':['regres', 'fit', 'pred', 'model'],
+                'pickle BO object for later':['save', 'pickle'],
+                'export proposed':['expo', 'save', 'exper']
+                }
+        
+        # Response functions
+        def bot_exit():
+            return 'exit'
+        
+        def bot_init():
             
-    
-    
-    
+            self.init_sample()
+            print(self.get_experiments())
+        
+        def bot_opt():
+            if len(self.obj.results) > 0:
+                self.run()
+                print(self.get_experiments())
+            else:
+                self.edbo_bot.talk('No experimental data are loaded.')
+        
+        def bot_next():
+            self.get_experiments()
+            print(self.get_experiments())
+        
+        def bot_data():
+            self.add_results()
+        
+        def bot_model():
+            self.model.regression()
+        
+        def bot_save():
+            self.save()
+        
+        def bot_export():
+            self.export_proposed()
+        
+        response_dict = {'exit':bot_exit,
+                'initialize':bot_init,
+                'optimize':bot_opt,
+                'print proposed':bot_next,
+                'add results':bot_data,
+                'check model':bot_model,
+                'pickle BO object for later':bot_save,
+                'export proposed':bot_export
+                }
+        
+        # Messages related to different triggers
+        print_dict = {'exit':'Exiting...',
+                'initialize':'Initializing via ' + self.init_seq.method + ' method...\n',
+                'optimize': 'Fitting model... Optimizing acquisition function...\n',
+                'print proposed':'The next proposed experiments are:\n',
+                'check model':'This is how ' + str(self.base_model) + ' fits the available data:\n',
+                'pickle BO object for later':'Saving edbo.BO instance...\n',
+                'export proposed':'Exporting proposed experiments to CSV file...\n'
+                }
+        
+        # Responses which require confirmaiton
+        confirm_dict = {
+                'initialize':'Choose initial experiments via ' + self.init_seq.method + ' method? (yes or no)',
+                'optimize':'Run Bayesian optimization with the avialable data? (yes or no)',
+                'add results':'Update experimental results from a new CSV file? (yes or no)',
+                'pickle BO object for later':'Save instace? (yes or no) You can load instance later with edbo.BO_express.load().'
+                }
+        
+        # Help loop
+        control = 'run'
+        while control != 'exit':
+            control = self.edbo_bot.resolve_direct('What can I help you with?',
+                                         trigger_dict,
+                                         response_dict,
+                                         print_dict,
+                                         confirm_dict)
+        
     
