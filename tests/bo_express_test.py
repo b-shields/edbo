@@ -31,7 +31,7 @@ def BO_pred(acq_func, plot=False, return_='pred', append=False, init='rand'):
     
     # Define reaction space and auto-encode
     n_ligands = random.sample([3,4,5,6,7,8], 1)[0]
-    ligands = pd.read_csv('data\ligands.csv').sample(n_ligands).values.flatten()
+    ligands = pd.read_csv('ligands.csv').sample(n_ligands).values.flatten()
     bases = ['DBU', 'MTBD', 'potassium carbonate', 'potassium phosphate', 'potassium tert-butoxide']
     reaction_components={'aryl_halide':['chlorobenzene','iodobenzene','bromobenzene'],
                      'base':bases,
