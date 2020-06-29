@@ -26,5 +26,3 @@ sh install.sh
 ```
 
 3. (optional) Test edbo. See tests directory for detials.
-
-Testing permissions
