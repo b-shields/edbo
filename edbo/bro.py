@@ -214,7 +214,7 @@ class BO:
         ----------
         pandas.DataFrame
             Domain points for proposed experiments.
-        """
+        """        
         
         # Initialize and train model
         self.model = self.base_model(self.obj.X, 
@@ -437,6 +437,7 @@ class BO:
 
         self.__dict__.update(tmp_dict) 
         
+        
 class BO_express(BO):
     """Quick method for calling Bayesian optimization algorithm.
     
@@ -452,6 +453,7 @@ class BO_express(BO):
         
         # Initialize edbo_bot
         self.edbo_bot = bot()
+        self.edbo_bot.talk('For help try BO_express.help() or see the documentation page.')
         
         # Check the input
         if len(reaction_components) > 0:
@@ -473,15 +475,23 @@ class BO_express(BO):
         if mordred:
             if len(self.reaction.data.columns.values) < 50:
                 mordred = False
-                
+        
+        # low D priors
         if len(self.reaction.data.columns.values) < 5:
             lengthscale_prior = [GammaPrior(1.3, 0.5), 0.5]
             outputscale_prior = [GammaPrior(5.0, 0.2), 20.0]
             noise_prior = [GammaPrior(1.5, 0.1), 5.0]
-        if mordred:
+        # DFT optimized priors or LS and OS
+        elif mordred and len(self.reaction.data.columns.values) < 100:
+            lengthscale_prior = [GammaPrior(2.0, 0.2), 5.0]
+            outputscale_prior = [GammaPrior(5.0, 0.5), 8.0]
+            noise_prior = [GammaPrior(1.5, 0.1), 5.0]  
+        # Mordred optimized priors
+        elif mordred:
             lengthscale_prior = [GammaPrior(2.0, 0.1), 10.0]
             outputscale_prior = [GammaPrior(2.0, 0.1), 10.0]
             noise_prior = [GammaPrior(1.5, 0.1), 5.0]
+        # OHE optimized priors
         else:
             lengthscale_prior = [GammaPrior(3.0, 1.0), 2.0]
             outputscale_prior = [GammaPrior(5.0, 0.2), 20.0]

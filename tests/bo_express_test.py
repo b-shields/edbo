@@ -11,50 +11,55 @@
 
 import numpy as np
 import pandas as pd
-from gpytorch.priors import GammaPrior
-from edbo.bro import BO
+from edbo.bro import BO_express
 from edbo.pd_utils import to_torch, torch_to_numpy
 import matplotlib.pyplot as plt
 import random
-
-############################################################################## Check for CUDA
-
-def test_torch_CUDA():
-    import torch
-    assert torch.cuda.is_available()
 
 ############################################################################## Test Functions
 
 # Objective
 
-def f(x):
-    """Noise free objective."""
+def random_result(*kwargs):
+    """Random objective."""
     
-    return np.sin(10 * x) * x * 100
+    return round(random.random(),3) * 100
 
 # Test a precomputed objective
 
-def BO_pred(acq_func, plot=False, return_='pred', append=False, init='external'):
+def BO_pred(acq_func, plot=False, return_='pred', append=False, init='rand'):
     
-    # Experiment index
-    X = np.linspace(0,1,1000)
-    exindex = pd.DataFrame([[x, f(x)] for x in X], columns=['x', 'f(x)'])
-    training_points = [50, 300, 500, 900]
+    # Define reaction space and auto-encode
+    n_ligands = random.sample([3,4,5,6,7,8], 1)[0]
+    ligands = pd.read_csv('data\ligands.csv').sample(n_ligands).values.flatten()
+    bases = ['DBU', 'MTBD', 'potassium carbonate', 'potassium phosphate', 'potassium tert-butoxide']
+    reaction_components={'aryl_halide':['chlorobenzene','iodobenzene','bromobenzene'],
+                     'base':bases,
+                     'solvent':['THF', 'Toluene', 'DMSO', 'DMAc'],
+                     'ligand':ligands,
+                     'concentration':[0.1, 0.2, 0.3],
+                     'temperature': [20, 30, 40]
+                     }
+    encoding={
+          'aryl_halide':'resolve',
+          'base':'resolve',
+          'solvent':'resolve',
+          'ligand':'mordred',
+          'concentration':'numeric',
+          'temperature':'numeric'}
     
     # Instatiate BO class
-    bo = BO(exindex=exindex,
-            domain=exindex.drop('f(x)', axis=1),
-            results=exindex.iloc[training_points],
-            acquisition_function=acq_func,
-            init_method=init,
-            lengthscale_prior=[GammaPrior(1.2,1.1), 0.2],
-            noise_prior=None,
-            batch_size=random.sample([1,2,3,4,5,6,7,8,9,10],1)[0],
-            fast_comp=True,
-            gpu=True)
+    bo = BO_express(reaction_components=reaction_components, 
+                    encoding=encoding,
+                    acquisition_function=acq_func,
+                    init_method=init,
+                    batch_size=random.sample(range(30),1)[0],
+                    computational_objective=random_result,
+                    target='yield')
     
+    bo.init_sample(append=True)
     bo.run(append=append)
-
+    
     # Check prediction
     if return_ == 'pred':
         
@@ -62,13 +67,11 @@ def BO_pred(acq_func, plot=False, return_='pred', append=False, init='external')
             bo.model.predict(to_torch(bo.obj.domain))                          # torch.tensor
             bo.model.predict(bo.obj.domain.values)                             # numpy.array
             bo.model.predict(list(bo.obj.domain.values))                       # list
-            bo.model.predict(exindex.drop('f(x)', axis=1))                     # pandas.DataFrame
+            bo.model.predict(bo.obj.domain)                                    # pandas.DataFrame
         except:
             return False
         
-        pred = bo.model.predict(bo.obj.domain.iloc[[32]])
-        pred = bo.obj.scaler.unstandardize(pred)
-        return (pred[0] - 1.33) < 0.1
+        return True
     
     # Check predictive postrior variance
     elif return_ == 'var':
@@ -77,12 +80,11 @@ def BO_pred(acq_func, plot=False, return_='pred', append=False, init='external')
             bo.model.predict(to_torch(bo.obj.domain))                          # torch.tensor
             bo.model.predict(bo.obj.domain.values)                             # numpy.array
             bo.model.predict(list(bo.obj.domain.values))                       # list
-            bo.model.predict(exindex.drop('f(x)', axis=1))                     # pandas.DataFrame
+            bo.model.predict(bo.obj.domain)                                    # pandas.DataFrame
         except:
             return False
         
-        var = bo.model.variance(bo.obj.domain.iloc[[32]])
-        return (var[0] - 0.04) < 0.1
+        return True
     
     # Make sure sampling works with tensors, arrays, lists, and DataFrames
     elif return_ == 'sample':
@@ -90,14 +92,13 @@ def BO_pred(acq_func, plot=False, return_='pred', append=False, init='external')
             bo.model.sample_posterior(to_torch(bo.obj.domain))                 # torch.tensor
             bo.model.sample_posterior(bo.obj.domain.values)                    # numpy.array
             bo.model.sample_posterior(list(bo.obj.domain.values))              # list
-            bo.model.sample_posterior(exindex.drop('f(x)', axis=1))            # pandas.DataFrame
+            bo.model.sample_posterior(bo.obj.domain)                           # pandas.DataFrame
             return True
         except:
             return False
         
     # Plot model
     elif return_ == 'plot':
-        next_points = bo.obj.get_results(bo.proposed_experiments)
         mean = bo.obj.scaler.unstandardize(bo.model.predict(bo.obj.domain))
         std = bo.obj.scaler.unstandardize(np.sqrt(bo.model.variance(bo.obj.domain))) * 2
         samples = bo.obj.scaler.unstandardize(bo.model.sample_posterior(bo.obj.domain, batch_size=3))
@@ -106,17 +107,15 @@ def BO_pred(acq_func, plot=False, return_='pred', append=False, init='external')
 
         # Model mean and standard deviation
         plt.subplot(211)
-        plt.plot(X, exindex['f(x)'], color='black')
-        plt.plot(X, mean, label='GP')
-        plt.fill_between(X, mean-std, mean+std, alpha=0.4)
+        plt.plot(range(len(mean)), mean, label='GP')
+        plt.fill_between(range(len(mean)), mean-std, mean+std, alpha=0.4)
         # Known results and next selected point
-        plt.scatter(bo.obj.results_input()['x'], bo.obj.results_input()['f(x)'], color='black', label='known')
-        plt.scatter(next_points['x'],next_points['f(x)'], color='red', label='next_experiments')
+        plt.scatter(bo.obj.results_input().index.values, bo.obj.results_input()['yield'], color='black', label='known')
         plt.ylabel('f(x)')
         # Samples
         plt.subplot(212)
         for sample in samples:
-            plt.plot(X, torch_to_numpy(sample, gpu=True))
+            plt.plot(range(len(mean)), torch_to_numpy(sample))
         plt.xlabel('x')
         plt.ylabel('Posterior Samples')
         plt.show()
@@ -127,8 +126,8 @@ def BO_pred(acq_func, plot=False, return_='pred', append=False, init='external')
         
         if init != 'external':
             bo.init_seq.batch_size = random.sample([2,3,4,5,6,7,8,9,10],1)[0]
-            
-        bo.simulate(iterations=5)
+        
+        bo.simulate(iterations=3)
         bo.plot_convergence()
         bo.model.regression()
         
@@ -157,7 +156,7 @@ def test_BO_simulate_TS():
     
 def test_BO_simulate_EI():
     assert BO_pred('EI', return_='simulate')
-
+    
 # Init methods
 
 def test_BO_simulate_kmeans():

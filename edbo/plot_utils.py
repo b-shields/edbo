@@ -300,7 +300,7 @@ def compare_convergence(data_list, batch_sizes, legend_list=None, xlabel='Batch'
 
 # Regression results
         
-def pred_obs(pred, obs, title='Fit', return_data=False, export_path=None):
+def pred_obs(pred, obs, title='Fit', return_data=False, export_path=None, return_scores=False):
     """
     Run a regression using the trained GP and return
     pred-obs plot for known data. return_data = True
@@ -315,9 +315,11 @@ def pred_obs(pred, obs, title='Fit', return_data=False, export_path=None):
     predobs['obs'] = np.array(obs)
     rmse, r2 = model_performance(predobs['pred'],predobs['obs'])
     rmse, r2 = np.round(rmse,2), np.round(r2,2)
-
+    
     if return_data == True:
         return predobs
+    elif return_scores == True:
+        return rmse, r2
     else:
         return scatter(
             predobs['pred'],

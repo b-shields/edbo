@@ -8,7 +8,7 @@ from scipy.stats import norm
 import math
 from random import sample as random_sample
 
-from .pd_utils import to_torch, join_to_df, argmax, complement, sample
+from .pd_utils import to_torch, join_to_df, argmax, complement, sample, torch_to_numpy
 
 # Thomposon Sampling
 
@@ -602,8 +602,8 @@ class hybrid_TS:
             samples = model.sample_posterior(domain, self.batch_size - 1)
             columns = list(obj.domain.columns.values)
             columns.append('sample')
-        
-            self.samples = samples.numpy()
+            
+            self.samples = torch_to_numpy(samples, gpu=obj.gpu)
     
             # ArgMax each posterior draw
             arg_maxs = pd.DataFrame(columns=columns)

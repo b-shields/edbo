@@ -3,6 +3,11 @@ Experimental Design via Bayesian Optimization
 
 ## Installation
 
+**Requirements:**
+- anaconda
+- an internet connecton
+- a copy of install.sh
+
 0. Install conda (if you haven't already):
 
 ```bash

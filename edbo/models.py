@@ -119,6 +119,7 @@ class GP_Model:
         
         """ 
         
+        # Optimize MLL with user specified parameters
         loss = optimize_mll(self.model, self.likelihood, self.X, self.y, 
                      learning_rate=self.learning_rate, 
                      n_restarts=self.n_restarts,
@@ -228,7 +229,7 @@ class GP_Model:
         return samples
     
     # Regression results
-    def regression(self, return_data=False, export_path=None):
+    def regression(self, return_data=False, export_path=None, return_scores=False):
         """Helper method for visualizing the models regression performance.
         
         Generates a predicted vs observed plot using the models training data.
@@ -267,7 +268,8 @@ class GP_Model:
         return pred_obs(pred, 
                         obs, 
                         return_data=return_data, 
-                        export_path=export_path)
+                        export_path=export_path,
+                        return_scores=return_scores)
 
 # Random Forest Model
 
@@ -345,7 +347,7 @@ class RF_Model:
         return pred
         
     # Regression   
-    def regression(self, return_data=False, export_path=None):
+    def regression(self, return_data=False, export_path=None, return_scores=False):
         """Helper method for visualizing the models regression performance.
                
         Generates a predicted vs observed plot using the models training data.
@@ -368,7 +370,8 @@ class RF_Model:
         return pred_obs(pred, 
                         obs, 
                         return_data=return_data, 
-                        export_path=export_path) 
+                        export_path=export_path,
+                        return_scores=return_scores) 
     
     # Pseudo-sample random forest model
     def sample_posterior(self, X, batch_size=1):
@@ -530,7 +533,7 @@ class Bayesian_Linear_Model:
         return pred
         
     # Regression   
-    def regression(self, return_data=False, export_path=None):
+    def regression(self, return_data=False, export_path=None, return_scores=False):
         """Helper method for visualizing the models regression performance.
         
         Generates a predicted vs observed plot using the models training data.
@@ -553,7 +556,8 @@ class Bayesian_Linear_Model:
         return pred_obs(pred, 
                         obs, 
                         return_data=return_data, 
-                        export_path=export_path) 
+                        export_path=export_path,
+                        return_scores=return_scores) 
     
     # Estimate variance
     def variance(self, points):
