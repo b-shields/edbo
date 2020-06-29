@@ -14,7 +14,7 @@ conda activate edbo
 
 echo "Cloning source..."
 
-git clone https://github.com/b-shields/edbo.git
+git clone --single-branch --branch master https://github.com/b-shields/edbo.git
 
 cd edbo
 

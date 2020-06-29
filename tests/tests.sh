@@ -17,5 +17,4 @@ pytest 1d_test.py > 1d_test.log                  # (2) Test GP model (prediction
 pytest 1d_test_RF.py > 1d_test_RF.log            # (3) Test RF model (predictions, variance estimation, sampling),
                                                  #     acquisition functions, and simulations.
 pytest 1d_test_GPU.py > 1d_test_GPU.log          # (4) Same as (2) but with gpu computation. Note a CUDA  GPU must be available.
-pytest 1d_test_fast.py > 1d_test_fast.log        # (5) Same as (2) but with fast computation enabled.
-pytest bo_express_test.py > bo_express_test.log  # (6) Test the BO_express class (auto-build reaction space + tests from (2).
+pytest 1d_test_fast.py > 1d_test_fast.log        # (4) Same as (2) but with fast computation enabled.
