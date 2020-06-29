@@ -166,7 +166,7 @@ class GP_Model:
             pred = self.model(points).mean.detach()
             
         if torch.cuda.is_available() and self.gpu == True:
-            pred = pred.gpu()
+            pred = pred.cpu()
         
         return pred.numpy()
     
@@ -194,7 +194,7 @@ class GP_Model:
         var = self.model(points).variance.detach()
         
         if torch.cuda.is_available() and self.gpu == True:
-            var = var.gpu()
+            var = var.cpu()
         
         return var.numpy()
     

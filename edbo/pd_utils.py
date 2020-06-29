@@ -82,7 +82,14 @@ def to_torch(data, gpu=False):
     Convert from pandas dataframe or numpy array to torch array.
     """
     
-    torch_data = torch.from_numpy(np.array(data).astype('float')).float()
+    if 'torch' in str(type(data)):
+        torch_data = data
+    
+    else:
+        try:
+            torch_data = torch.from_numpy(np.array(data).astype('float')).float()
+        except:
+            torch_data = torch.tensor(data).float()
 
     if torch.cuda.is_available() and gpu == True:
         torch_data = torch_data.cuda()

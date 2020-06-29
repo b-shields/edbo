@@ -34,7 +34,7 @@ conda install -y scikit-learn=0.22.1
 conda install -y matplotlib seaborn
 
 pip install gpytorch==1.0.0 pyclustering==0.9.3.1
-pip3 install pyro-ppl==1.1
+pip install pyro-ppl==1.1
 
 ################################################# Install package namespace
 
