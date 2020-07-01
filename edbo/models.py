@@ -612,7 +612,7 @@ def score(trained_model, X, y):
     
     Parameters
     ----------
-    trainined_model : bro.models 
+    trainined_model : edbo.models 
         Trained model.
     X : numpy.array, torch.tensor
         Domain points to be evaluated.
@@ -638,7 +638,7 @@ def cross_validate(base_model, X, y, kfold=5, random_state=None, **kwargs):
     
     Parameters
     ----------
-    base_model : bro.models
+    base_model : edbo.models
         Uninitialized model object.
     X : numpy.array, torch.tensor
         Domain points to be evaluated.

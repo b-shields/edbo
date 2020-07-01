@@ -48,7 +48,7 @@ class Init:
         
         Parameters
         ----------
-        obj : bro.objective
+        obj : edbo.objective
             Objective data container.
         seed : None, int
             Random seed for random selection and initial choice of medoids 
@@ -92,7 +92,7 @@ class Init:
         
         Parameters
         ----------
-        obj : bro.objective
+        obj : edbo.objective
             Objective data container.
         export_path : None, str
             Path to export visualization if applicable.
@@ -142,7 +142,7 @@ def rand(obj, batch_size, seed=None):
         
     Parameters
     ----------
-    obj : bro.objective
+    obj : edbo.objective
             Objective data container.
     batch_size : int
         Number of points to be selected.
@@ -168,7 +168,7 @@ def external_data(obj):
         
     Parameters
     ----------
-    obj : bro.objective
+    obj : edbo.objective
             Objective data container.
                
     Returns
@@ -192,7 +192,7 @@ def PAM(obj, batch_size, distance='gower', visualize=True,
         
     Parameters
     ----------
-    obj : bro.objective
+    obj : edbo.objective
             Objective data container.
     batch_size : int
         Number of points to be selected. Batch size also determins the number 
@@ -276,7 +276,7 @@ def k_means(obj, batch_size, visualize=True, seed=None, export_path=None,
         
     Parameters
     ----------
-    obj : bro.objective
+    obj : edbo.objective
             Objective data container.
     batch_size : int 
         Number of points to be selected. Batch size also determins the number 

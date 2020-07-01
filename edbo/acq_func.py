@@ -29,7 +29,7 @@ class thompson_sampling:
             Select duplicate domain points.
         chunk_size : int
             Sampling over large spaces can be very costly. Therefore when TS 
-            if |edbo.objective.domain| > chunk_size the space is broken up into
+            if len(domain) > chunk_size the space is broken up into
             chunks, sampled, and concatenated together.
         """
         
@@ -42,9 +42,9 @@ class thompson_sampling:
         
         Parameters
         ----------
-        model : bro.models 
+        model : edbo.models 
             Trained model to be sampled.
-        obj : bro.objective 
+        obj : edbo.objective 
             Objective object containing information about the domain.
         
         Returns
@@ -102,9 +102,9 @@ class top_predicted:
         
         Parameters
         ----------
-        model : bro.models 
+        model : edbo.models 
             Trained model to be sampled.
-        obj : bro.objective 
+        obj : edbo.objective 
             Objective object containing information about the domain.
         
         Returns
@@ -131,9 +131,9 @@ def mean(model, obj, **kwargs):
         
     Parameters
     ----------
-    model : bro.models
+    model : edbo.models
         Trained model.
-    obj : bro.objective 
+    obj : edbo.objective 
         Objective object containing information about the domain.
     jitter : float
         Parameter which controls the degree of exploration.
@@ -176,9 +176,9 @@ class max_variance:
         
         Parameters
         ----------
-        model : bro.models 
+        model : edbo.models 
             Trained model to be sampled.
-        obj : bro.objective 
+        obj : edbo.objective 
             Objective object containing information about the domain.
         
         Returns
@@ -208,9 +208,9 @@ def variance(model, obj, **kwargs):
         
     Parameters
     ----------
-    model : bro.models
+    model : edbo.models
         Trained model.
-    obj : bro.objective 
+    obj : edbo.objective 
         Objective object containing information about the domain.
     jitter : float
         Parameter which controls the degree of exploration.
@@ -235,9 +235,9 @@ def expected_improvement(model, obj, jitter=0.01):
         
     Parameters
     ----------
-    model : bro.models
+    model : edbo.models
         Trained model.
-    obj : bro.objective 
+    obj : edbo.objective 
         Objective object containing information about the domain.
     jitter : float
         Parameter which controls the degree of exploration.
@@ -283,9 +283,9 @@ def probability_of_improvement(model, obj, jitter=1e-2):
            
     Parameters
     ----------
-    model : bro.models
+    model : edbo.models
         Trained model.
-    obj : bro.objective 
+    obj : edbo.objective 
         Objective object containing information about the domain.
     jitter : float
         Parameter which controls the degree of exploration.
@@ -327,9 +327,9 @@ def upper_confidence_bound(model, obj, jitter=1e-2, delta=0.5):
         
     Parameters
     ----------
-    model : bro.models
+    model : edbo.models
         Trained model.
-    obj : bro.objective 
+    obj : edbo.objective 
         Objective object containing information about the domain.
     jitter : float
         Parameter which controls the degree of exploration.
@@ -388,9 +388,9 @@ class Kriging_believer:
         
         Parameters
         ----------
-        model : bro.models 
+        model : edbo.models 
             Trained model to be sampled.
-        obj : bro.objective 
+        obj : edbo.objective 
             Objective object containing information about the domain.
         
         Returns
@@ -524,7 +524,7 @@ class hybrid_TS:
         """
         Parameters
         ----------
-        hybrid : bro.acq_funcs:
+        hybrid : edbo.acq_funcs:
             hybrid method to be used. 
         batch_size : int
             Number of points to select.
@@ -542,9 +542,9 @@ class hybrid_TS:
         
         Parameters
         ----------
-        model : bro.models 
+        model : edbo.models 
             Trained model to be sampled.
-        obj : bro.objective 
+        obj : edbo.objective 
             Objective object containing information about the domain.
         
         Returns
@@ -658,9 +658,9 @@ class eps_greedy:
         
         Parameters
         ----------
-        model : bro.models 
+        model : edbo.models 
             Trained model to be sampled.
-        obj : bro.objective 
+        obj : edbo.objective 
             Objective object containing information about the domain.
         
         Returns
@@ -739,9 +739,9 @@ class random:
         
         Parameters
         ----------
-        model : bro.models 
+        model : edbo.models 
             Trained model to be sampled.
-        obj : bro.objective 
+        obj : edbo.objective 
             Objective object containing information about the domain.
         
         Returns
@@ -829,9 +829,9 @@ class acquisition:
         
         Parameters
         ----------
-        model : bro.models
+        model : edbo.models
             Trained model.
-        obj : bro.objective
+        obj : edbo.objective
             Objective object containining data and scalers.
         
         Returns
