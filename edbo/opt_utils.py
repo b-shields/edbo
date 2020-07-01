@@ -1,8 +1,6 @@
 # -*- coding: utf-8 -*-
-"""
-Model Optimization Utilities
 
-"""
+# Imports
 
 import numpy as np
 import torch

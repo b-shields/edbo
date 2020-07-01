@@ -15,7 +15,7 @@ from .init_scheme import Init
 from .objective import objective
 from .acq_func import acquisition
 from .plot_utils import plot_convergence
-from .pd_utils import to_torch
+from .pd_utils import to_torch, load_csv_or_excel
 from .chem_utils import ChemDraw
 from .feature_utils import reaction_space
 from .utils import bot
@@ -70,7 +70,7 @@ class BO:
         exindex : pandas.DataFrame, optional
             Experiment results index matching domain format. Used as lookup 
             table for simulations.
-        model bro.models: 
+        model : edbo.models 
             Surrogate model object used for Bayesian optimization. 
             See bro.models for predefined models and specification of custom
             models.
@@ -242,9 +242,8 @@ class BO:
         return self.proposed_experiments
         
     # Simulation using known objectives
-    def simulate(self, iterations=1, seed=None, fast_comp=False, 
-                 update_priors=False, n_restarts=0, learning_rate=0.1,
-                 training_iters=100):
+    def simulate(self, iterations=1, seed=None, update_priors=False, 
+                 n_restarts=0, learning_rate=0.1, training_iters=100):
         """Run autonomous BO loop.
         
         Run N iterations of optimization with initial results obtained 
@@ -270,10 +269,6 @@ class BO:
             parameters.
         seed : None, int
             Random seed used for initialization.
-        fast_comp : bool, int 
-            Use gpytorch fast computation features. Integers specify a 
-            threshold number of results above which fast computation will 
-            be used.
         update_priors : bool 
             Use parameter estimates from optimization step N-1 as initial 
             values for step N.
@@ -285,14 +280,6 @@ class BO:
         
         # Simulation
         for i in range(iterations):
-            
-            # Toggle computation
-            if fast_comp == True:
-                fast_computation(True)
-            elif fast_comp == False:
-                fast_computation(False)
-            elif fast_comp < len(self.obj.y):
-                fast_computation(True)
                 
             # Use pamater estimates from previous step as initial values
             if update_priors == True and i > 0 and 'GP' in str(self.base_model):
@@ -410,7 +397,7 @@ class BO:
         
         Returns
         ----------
-        None.
+        None
         """ 
         
         file = open(path, 'wb')
@@ -428,7 +415,7 @@ class BO:
         
         Returns
         ----------
-        None.
+        None
         """ 
         
         file = open(path, 'rb')
@@ -439,17 +426,129 @@ class BO:
         
         
 class BO_express(BO):
-    """Quick method for calling Bayesian optimization algorithm.
+    """Quick method for auto-generating a reaction space, encoding, and BO.
     
-    Class provides a unified framework for selecting experimental 
-    conditions for the parallel optimization of chemical reactions
-    and for the simulation of known objectives.
+    Class provides a unified framework for defining reaction spaces, encoding 
+    reacitons, selecting experimental conditions for the parallel optimization 
+    of chemical reactions, and analyzing results.
+    
+    BO_express automates most of the process required for BO such as the 
+    featurization of the reaction space, preprocessing of data and selection of 
+    gaussian process priors.
+    
+    Reaction components and encodings are passed to BO_express using 
+    dictionaries. BO_express attempts to encode each component based on the 
+    specified encoding. If there is an error in a SMILES string or the name
+    could not be found in the NIH database an edbo bot is spawned to help
+    resolve the issue. Once instantiated, BO_express.help() will also spawn
+    an edbo bot to help with tasks.
+    
+    Example
+    -------
+    Defining a reaction space ::
+    
+        from edbo.bro import BO_express
+            
+        # (1) Define a dictionary of components
+        reaction_components={
+            'aryl_halide':['chlorobenzene','iodobenzene','bromobenzene'],
+            'base':['DBU', 'MTBD', 'potassium carbonate', 'potassium phosphate'],
+            'solvent':['THF', 'Toluene', 'DMSO', 'DMAc'],
+            'ligand': ['c1ccc(cc1)P(c2ccccc2)c3ccccc3', # PPh3
+                       'C1CCC(CC1)P(C2CCCCC2)C3CCCCC3', # PCy3
+                       'CC(C)c1cc(C(C)C)c(c(c1)C(C)C)c2ccccc2P(C3CCCCC3)C4CCCCC4' # X-Phos
+                       ],
+            'concentration':[0.1, 0.2, 0.3],
+            'temperature': [20, 30, 40]}
+        
+        # (2) Define a dictionary of desired encodings
+        encoding={'aryl_halide':'resolve',
+                  'base':'ohe',
+                  'solvent':'resolve',
+                  'ligand':'smiles',
+                  'concentration':'numeric',
+                  'temperature':'numeric'}
+        
+        # (3) Instatiate BO_express
+        bo = BO_express(reaction_components=reaction_components, 
+                        encoding=encoding,
+                        batch_size=10,
+                        acquisition_function='TS',
+                        target='yield')
+    
     """
     
     def __init__(self,
                  reaction_components={}, encoding={},
                  model=GP_Model, acquisition_function='EI', init_method='rand', 
                  target=-1, batch_size=5, computational_objective=None):
+        """        
+        Parameters
+        ----------
+        reaction_components : dict
+            Dictionary of reaction components of the form: 
+                
+            Example
+            -------
+            Defining reaction components ::
+                
+                {'A': [a1, a2, a3, ...],
+                 'B': [b1, b2, b3, ...],
+                 'C': [c1, c2, c3, ...],
+                             .
+                 'N': [n1, n2, n3, ...]}
+            
+            Components can be specified as: (1) arbitrary names, (2) chemical 
+            names or nicknames, (3) SMILES strings, or (4) numeric values.
+        encodings : dict
+            Dictionary of encodings with keys corresponding to reaction_components.
+            Encoding dictionary has the form: 
+                
+            Example
+            -------
+            Defining reaction encodings ::
+                
+                {'A': 'resolve',
+                 'B': 'ohe',
+                 'C': 'smiles',
+                        .
+                 'N': 'numeric'}
+            
+            Encodings can be specified as: ('resolve') resolve a compound name 
+            using the NIH database and compute Mordred descriptors, ('ohe') 
+            one-hot-encode, ('smiles') compute Mordred descriptors using a smiles 
+            string, ('numeric') numerical reaction parameters are used as passed.
+            If no encoding is specified, the space will be automatically 
+            one-hot-encoded.
+        model : edbo.models
+            Surrogate model object used for Bayesian optimization. 
+            See bro.models for predefined models and specification of custom
+            models.
+        acquisition_function : str 
+            Acquisition function used for for selecting a batch of domain 
+            points to evaluate. Options: (TS) Thompson Sampling, ('EI') 
+            Expected Improvement, (PI) Probability of Improvement, (UCB) 
+            Upper Confidence Bound, (EI-TS) EI (first choice) + TS (n-1 choices), 
+            (PI-TS) PI (first choice) + TS (n-1 choices), (UCB-TS) UCB (first 
+            choice) + TS (n-1 choices), (MeanMax-TS) Mean maximization 
+            (first choice) + TS (n-1 choices), (VarMax-TS) Variance 
+            maximization (first choice) + TS (n-1 choices), (MeanMax) 
+            Top predicted values, (VarMax) Variance maximization, (rand) 
+            Random selection.
+        init_method : str 
+            Strategy for selecting initial points for evaluation. 
+            Options: (rand) Random selection, (pam) k-medoids algorithm, 
+            (kmeans) k-means algorithm, (external) User define external data
+            read in as results.
+        target : str
+            Column label of optimization objective. If set to -1, the last 
+            column of the DataFrame will be set as the target.
+        batch_size : int
+            Number of experiments selected via acquisition and initialization 
+            functions.
+        computational_objective : function, optional
+            Function to be optimized for computational objectives.
+        """
         
         # Initialize edbo_bot
         self.edbo_bot = bot()
@@ -511,9 +610,22 @@ class BO_express(BO):
         
         
     def get_experiments(self, structures=False):
-        """
-        Retrieve proposed experiments and print structures for any SMILES
-        encoded components.
+        """Return indexed experiments proposed by Bayesian optimization algorithm.
+        
+        edbo.BO works directly with a standardized encoded reaction space. This 
+        method returns proposed experiments as the origional smiles strings, 
+        categories, or numerical values.
+        
+        Parameters
+        ----------
+        structures : bool
+            If True, use RDKit to print out the chemical structures of any
+            encoded smiles strings.
+        
+        Returns
+        ----------
+        pandas.DataFrame
+            Proposed experiments.
         """
         
         # Index entries
@@ -533,12 +645,30 @@ class BO_express(BO):
         return experiments
     
     def add_results(self, results_path=None):
-        """
-        Include experimental results input in a CSV file.
+        """Add experimental results.
+        
+        Experimental results should be added with the same column headings as
+        those returned by BO_express.get_experiments. If a path to the results
+        is not specified, an edbo bot is spawned to help load results. It does
+        so by exporting the entire reaction space to a CSV file in the working
+        directory.
+        
+        Note: The first column in the CSV/EXCEL results file must have the same
+        index as the experiment. Try BO_express.export_proposed() to export a
+        CSV file with the proper format.
+        
+        Parameters
+        ----------
+        results_path : str
+            Imports results from a CSV/EXCEL file with system path results_path.
+        
+        Returns
+        ----------
+        None
         """
         
         if results_path != None:
-            results = pd.read_csv(results_path, index_col=0).dropna(axis=0)
+            results = load_csv_or_excel(results_path, index_col=0).dropna(axis=0)
         
         else:
             self.edbo_bot.talk('No path to <results>.csv was specified.')
@@ -561,8 +691,22 @@ class BO_express(BO):
                              computational_objective=self.obj.computational_objective)
         
     def export_proposed(self, path=None):
-        """
-        Export a pandas dataframe with proposed experiments.
+        """Export proposed experiments.
+        
+        edbo.BO works directly with a standardized encoded reaction space. This 
+        method exports proposed experiments as the origional smiles strings, 
+        categories, or numerical values. If a path to the results is not 
+        specified, a CSV file entitled 'experiments.csv' will be exported to 
+        the current working directory.
+        
+        Parameters
+        ----------
+        path : str
+            Export a CSV file to path.
+        
+        Returns
+        ----------
+        None
         """
             
         index = self.proposed_experiments.index.values
@@ -579,8 +723,17 @@ class BO_express(BO):
             proposed.to_csv(path)
     
     def help(self):
-        """
-        Run edbo bot to help with tasks.
+        """Spawn an edbo bot to help with tasks.
+        
+        If you are not familiar with edbo commands BO_express.help() will spawn
+        an edbo bot to help with tasks. Natural language can be used to interact 
+        with edbo bot in the terminal to accomplish tasks such as: initializing 
+        (selecting initial experiments using chosen init method), optimizing 
+        (run BO algorithm with availible data to choose next experiments), getting 
+        proposed experiments, adding experimental results, checking the underlying
+        models regression performance, saving the BO instance so you can load it 
+        for use later, and exporting proposed experiments to a CSV file.
+
         """
         
         # Keywords which trigger responses
@@ -599,7 +752,6 @@ class BO_express(BO):
             return 'exit'
         
         def bot_init():
-            
             self.init_sample()
             print(self.get_experiments())
         

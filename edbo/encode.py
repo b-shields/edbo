@@ -1,8 +1,4 @@
 # -*- coding: utf-8 -*-
-"""
-Encoders
-
-"""
 
 # Imports 
 
@@ -24,28 +20,29 @@ import matplotlib.pyplot as plt
 # Autoencoder class
 
 class autoencoder:
-    """!
-    @brief Class represents an implementation of a simple autoencoder.
-    @details Class provides a framework for deminsionality reduction
-             in a mannor compatible with the objective class.
+    """Class represents an implementation of a simple autoencoder.
+    
+    Class provides a framework for deminsionality reduction in a manner 
+    compatible with the edbo.objective class.
     """
     
     def __init__(self, layers=[50, 25], activity_l1=[1e-7, 1e-7],
                  epochs=200, batch_size=100):
-        """!
-        @brief Constructor for autoencoder class.
-        
+        """        
         Parameters
         ----------
-        @param[in] layers (list): list of hidden layer sizes.
-        @param[in] activity_l1 (list): list of activity regularizer
-                   l1 values.
-        @param[in] epochs (int): training epochs.
-        @param[in] batch_size (int): training batch sizes.
+        layers : list
+            List of hidden layer sizes.
+        activity_l1 : list
+            List of activity regularizer l1 values.
+        epochs : int
+            Training epochs.
+        batch_size : int
+            Training batch sizes.
         
         Returns
         ----------
-        None.
+        None
         """
             
         self.layers = layers
@@ -54,16 +51,20 @@ class autoencoder:
         self.batch_size = batch_size
 
     def fit(self, obj, random_state=0, test_size=0.1):
-        """
-        @brief Constructor for autoencoder class.
+        """Train the autoencoder to reconstruct the reaction space.
         
         Parameters
         ----------
-        @param[in] obj (bro.objective): initialized objective object.
+        obj : edbo.objective:
+            Initialized edbo.objective object.
+        random_state : int
+            Random seed for training/validation split.
+        test_size : float
+            Portion of data used as validation set.
         
         Returns
         ----------
-        None.
+        None
         """
         
         # Get data
@@ -120,7 +121,13 @@ class autoencoder:
         self.model = autoencoder
         
     def plot_loss(self):
+        """Plot the loss in reconstructing the validation set on each epoch.
         
+        Returns
+        ----------
+        matplotlib.pyplot
+            Plot of validation loss.
+        """
         # Plot training & validation loss values
         plt.plot(self.model.history.history['loss'])
         plt.plot(self.model.history.history['val_loss'])
@@ -131,6 +138,17 @@ class autoencoder:
         return plt.show()
     
     def transform(self, obj):
+        """Transform the encoded domain in edbo.objective object
+        
+        Parameters
+        ----------
+        obj : edbo.objective:
+            Initialized edbo.objective object.
+        
+        Returns
+        ----------
+        None
+        """
         
         get_layer_output = K.function([self.model.layers[0].input],
                                       [self.model.layers[len(self.layers)].output])

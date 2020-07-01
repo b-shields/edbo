@@ -1,8 +1,4 @@
 # -*- coding: utf-8 -*-
-"""
-Pandas Utilities
-
-"""
 
 # Imports
 
@@ -12,7 +8,7 @@ import numpy as np
 
 # Load data from csv or excel file
 
-def load_csv_or_excel(file_path):
+def load_csv_or_excel(file_path, index_col=None):
     """
     Import csv or excel file using pandas.
     """
@@ -20,9 +16,9 @@ def load_csv_or_excel(file_path):
     file_path = str(file_path)
     
     if '.csv' in file_path:
-        data = pd.read_csv(file_path)
+        data = pd.read_csv(file_path, index_col=index_col)
     elif '.xlsx' in file_path:
-        data = pd.read_excel(file_path)
+        data = pd.read_excel(file_path, index_col=index_col)
     else:
         data = pd.DataFrame()
         

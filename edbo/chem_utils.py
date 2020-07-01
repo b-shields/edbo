@@ -18,17 +18,17 @@ from urllib.request import urlopen
 # Convert from chemical name or nickname to smiles
 
 def name_to_smiles(name):
-    """!
-    @brief Convert from chemical name to SMILES string using chemical 
-           identifier resolver.
+    """Convert from chemical name to SMILES string using chemical identifier resolver.
     
     Parameters
     ----------
-    @param[in] name (str): Name of chemical.
+    name : str 
+        Name or nickname of compound.
     
     Returns
     ----------
-    (str) SMILES corresponding to chemical name.
+    str 
+        SMILES string corresponding to chemical name.
     """
     
     name = name.replace(' ', '%20')
@@ -47,27 +47,25 @@ def name_to_smiles(name):
 # 2D SMILES visualizations
 
 class ChemDraw:
-    """!
-    @brief Class for chemical structure visualization.
-    """
+    """Class for chemical structure visualization."""
     
     def __init__(self, SMILES_list, row_size='auto', legends=None, 
                  ipython_svg=True):
-        """!
-        @brief Constructor for ChemDraw class.
-        
+        """        
         Parameters
         ----------
-        @param[in] SMILES_list (list): List of SMILES strings to be visualized.
-        @param[in] row_size ('auto', int): Number of structures to include per
-                   row.
-        @param[in] legends (None, list): Structure legends to include below
-                   representations.
-        @param[in] ipython_svg (bool): Print SVG in ipython consoles.
+        SMILES_list : list 
+            List of SMILES strings to be visualized.
+        row_size : 'auto', int 
+            Number of structures to include per row.
+        legends : None, list
+            Structure legends to include below representations.
+        ipython_svg :bool 
+            If true print SVG in ipython console.
         
         Returns
         ----------
-        None.
+        None
         """
         
         self.SMILES_list = list(SMILES_list)
@@ -84,12 +82,12 @@ class ChemDraw:
         self.SVG = ipython_svg
         
     def show(self):
-        """!
-        @brief Show 2D representation of SMILES strings.
+        """Show 2D representation of SMILES strings.
         
         Returns
         ----------
-        (image) Visualization of chemical structures.
+        image 
+            Visualization of chemical structures.
         """
         
         img = Chem.Draw.MolsToGridImage(self.mols, 
@@ -103,12 +101,16 @@ class ChemDraw:
         display.display(img)
     
     def export(self, path):
-        """!
-        @brief Export 2D representation of SMILES strings.
+        """Export 2D representation of SMILES strings.
+        
+        Parameters
+        ----------
+        path : 'str'
+            Export a PNG image of chemical structures to path.
         
         Returns
         ----------
-        (image) Visualization of chemical structures.
+        None
         """
         
         img = Chem.Draw.MolsToGridImage(self.mols, 

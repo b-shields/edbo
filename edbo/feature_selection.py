@@ -1,8 +1,4 @@
 # -*- coding: utf-8 -*-
-"""
-Feature selection functions
-
-"""
 
 # Imports
 
@@ -10,24 +6,27 @@ import pandas as pd
 from sklearn.ensemble import RandomForestRegressor
 from sklearn.inspection import permutation_importance
 from sklearn.model_selection import train_test_split
-from sklearn.preprocessing import StandardScaler
-from sklearn.preprocessing import MinMaxScaler
 import matplotlib.pyplot as plt
 
-# RF (Permutation importance feature selection)
+# Permutation importance feature selection using a random forest model
 
-class RF:
-    """
-    Addapted from Permutation Importance with Multicollinear or Correlated 
-    Features in sklearn.
+class rf_permutation_importance:
+    """Feature selection via random forest permutation importance
     
-    Takes availible data as a DataFrame and returns a feature selection
-    object.
+    Addapted from: "Permutation Importance with Multicollinear or Correlated 
+    Features" in sklearn.
     """
     def __init__(self, use_data='all'):
-        """
-        param: importance_type (str): which portion of the data to evaluate
-               permutation importance on (all, training, test).
+        """        
+        Parameters
+        ----------
+        use_data : str
+            If 'all' use all availible data when training RF model. Else use
+            an 80/20 split of the data.
+        
+        Returns
+        ----------
+        None
         """
         
         self.importance_type = use_data
@@ -42,8 +41,22 @@ class RF:
     # Run model and compute permutation importance
     
     def run(self, df, target, n_repeats=5, random_state=1):
-        """
-        Fit random forest model and compute permulation imortance.
+        """Fit model and compute permutation importance.
+        
+        Parameters
+        ----------
+        df : pandas.DataFrame
+            DataFrame containing experimental data.
+        target : 'str'
+            Column name for target (e.g., 'yield').
+        n_repeats : int
+            Number of times to permuate in order to get statistics.
+        random_state : int
+            Random seed used when using a training/test split.
+        
+        Returns
+        ----------
+        None
         """
         
         # Select training and test data
@@ -76,6 +89,20 @@ class RF:
         self.importances['mean'] = self.importances.mean(axis=1)
     
     def plot_importances(self, top_k=10, export_path=None):
+        """Plot a importances as a box plot.
+        
+        Parameters
+        ----------
+        top_k : int
+            Show top_k features according to permutation importance.
+        export_path : None, str
+            Export impotance plot to export_path as an SVG.
+        
+        Returns
+        ----------
+        matplotlib.pyplot
+            Box plot of results.
+        """
         
         perm_sorted_idx = self.result.importances_mean.argsort()
         
@@ -93,8 +120,18 @@ class RF:
         return plt.show()
     
     def get_best(self, threshold):
-        """
-        Return descriptors with importance above threshold.
+        """Return descriptors with importance above threshold.
+        
+        Parameters
+        ----------
+        threshold : float
+            Return a list of descriptors with importance above the specified
+            threshold.
+        
+        Returns
+        ----------
+        numpy.array
+            Array of descriptors with importance above the threshold.
         """
         
         best = self.importances[self.importances['mean'] > threshold]
@@ -106,122 +143,3 @@ class RF:
         
         return best.index.values
         
-# Uncorrelated set
-
-def uncorrelated_features(df, target=None, threshold=0.7):
-    """
-    Returns an uncorrelated set of features.
-    """
-    
-    if target == None:
-        corr = df.corr().abs()
-    else:    
-        corr = df.drop(target,axis=1).corr().abs()
-    
-    keep = []
-    for i in range(len(corr.iloc[:,0])):
-        above = corr.iloc[:i,i]
-        if len(keep) > 0: above = above[keep]
-        if len(above[above < threshold]) == len(above):
-            keep.append(corr.columns.values[i])
-    
-    new = df.copy()[keep]
-    
-    if target != None:
-        new[target] = list(df[target])
-    
-    return new
-        
-# Remove columns with only a single value
-
-def drop_single_value_columns(df):
-    """
-    Drop datafame columns with zero variance. Return a new dataframe.
-    """
-    
-    keep = []
-    for i in range(len(df.columns)):
-        if len(df.iloc[:,i].drop_duplicates()) > 1:
-            keep.append(df.columns.values[i])
-            
-    return df[keep]
-    
-# Remove columns with non-numeric entries
-    
-def drop_string_columns(df):
-    """
-    Drop dataframe columns with non-numeric values. Return a new dataframe.
-    """
-    
-    keep = []
-    for i in range(len(df.columns)):
-        unique = df.iloc[:,i].drop_duplicates()
-        keepQ = True
-        for j in range(len(unique)):
-            if type(unique.iloc[j]) == type(''):
-                keepQ = False
-                break
-        if keepQ: keep.append(df.columns.values[i])
-        
-    return df[keep]
-        
-# Remove unwanted descriptors
-
-def remove_features(df, drop_list):
-    """
-    Remove features from dataframe with columns containing substrings in
-    drop_list. Return a new dataframe.
-    """
-
-    keep = []
-    for column_name in list(df.columns.values):
-        keepQ = True
-        for substring in list(drop_list):
-            if substring in column_name:
-                keepQ = False
-                break
-        if keepQ: keep.append(column_name)
-    
-    return df[keep]
-
-# Get features by column name
-
-def get_features(df, keep_list):
-    """
-    Remove features from dataframe with columns not containing substrings in
-    drop_list. Return a new dataframe.
-    """
-
-    keep = []
-    for column_name in list(df.columns.values):
-        for substring in list(keep_list):
-            if substring in column_name:
-                keep.append(column_name)
-                break
-                
-    return df[keep]
-
-# Standardize
-    
-def standardize(df, target=None, scaler='minmax'):
-    """
-    Standardize descriptors but keep target.
-    """
-    
-    if scaler == 'minmax':
-        scaler = MinMaxScaler()
-    else:
-        scaler = StandardScaler()
-
-    if target == None:
-        df_temp = df.copy()
-    else:
-        df_temp = df.copy().drop(target, axis=1)
-    
-    out = scaler.fit_transform(df_temp)
-    new_df = pd.DataFrame(data=out, columns=df_temp.columns)
-    
-    if target != None:
-        new_df[target] = df[target]
-    
-    return new_df

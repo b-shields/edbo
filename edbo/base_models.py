@@ -1,12 +1,4 @@
 # -*- coding: utf-8 -*-
-"""
-Example
--------
-Defining a custom model ::
-    
-    @code...
-
-"""
 
 # Imports
 
@@ -26,7 +18,7 @@ from .pd_utils import to_torch
 class gp_model(ExactGP):
     """Base gaussian process model.
     
-    GPyTorch's exact gaussian process regression with Matern kernels. 
+    GPyTorch's exact gaussian process regression with Matern kernel class.
     """
     
     def __init__(self, X, y, likelihood, gpu=False, nu=2.5,
@@ -156,7 +148,20 @@ class random_forest(RandomForestRegressor):
                                             )
 
 def fast_computation(fastQ):
-    """Function for turning on/off GPyTorch fast computation features."""
+    """Function for turning on/off GPyTorch fast computation features.
+            
+    Parameters
+    ----------
+    fastQ : bool
+        If True, gpytorch fast computation features will be utilized. Modified 
+        settings include: (1) fast_pred_var, (2) fast_pred_samples, 
+        (3) covar_root_decomposition, (4) log_prob, (5) solves, (6) deterministic_probes, 
+        (7) memory_efficient.
+        
+    Returns
+    ----------
+    None
+    """ 
     
     gpytorch.settings.fast_pred_var._state = fastQ
     gpytorch.settings.fast_pred_samples._state = fastQ 

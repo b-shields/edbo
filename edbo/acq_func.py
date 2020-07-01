@@ -16,10 +16,10 @@ class thompson_sampling:
     """Class represents the Thompson sampling algorithm.
     
     Provides a framework for selecting experimental conditions for parallel 
-    optimization via sampling the GP predictive posterior.
+    optimization via sampling the GP  posterior predictive distribution.
     """
     
-    def __init__(self, batch_size, duplicates):
+    def __init__(self, batch_size, duplicates, chunk_size=20000):
         """
         Parameters
         ----------
@@ -27,12 +27,15 @@ class thompson_sampling:
             Number of points to select.
         duplicates : bool
             Select duplicate domain points.
-        
+        chunk_size : int
+            Sampling over large spaces can be very costly. Therefore when TS 
+            if |edbo.objective.domain| > chunk_size the space is broken up into
+            chunks, sampled, and concatenated together.
         """
         
         self.batch_size = batch_size
         self.duplicates = duplicates
-        self.chunk_size = 20000
+        self.chunk_size = chunk_size
         
     def run(self, model, obj):
         """Run Thompson sampling algorithm on a trained model and user defined domain.
@@ -276,7 +279,7 @@ def probability_of_improvement(model, obj, jitter=1e-2):
     PI favors exploitation of exporation. Equally rewards any
     improvement over the best observed value.
     
-    As implemented in: https://github.com/maxim5/hyper-engine
+    Implimentation derived from: https://github.com/maxim5/hyper-engine
            
     Parameters
     ----------
@@ -320,7 +323,7 @@ def probability_of_improvement(model, obj, jitter=1e-2):
 def upper_confidence_bound(model, obj, jitter=1e-2, delta=0.5):
     """Computes upper confidence bound.
     
-    As implemented in: https://github.com/maxim5/hyper-engine
+    Implimentation derived from: https://github.com/maxim5/hyper-engine
         
     Parameters
     ----------
