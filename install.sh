@@ -32,6 +32,7 @@ conda install -y pandas=0.25.3 numpy=1.17.4 xlrd
 conda install -y pytorch=1.3.1 cudatoolkit=10.1 torchvision -c pytorch
 conda install -y scikit-learn=0.22.1
 conda install -y matplotlib seaborn
+conda install -y dill
 
 pip install gpytorch==1.0.0 pyclustering==0.9.3.1
 pip install pyro-ppl==1.1
