@@ -23,12 +23,12 @@ cd edbo
 echo "#########################################"
 echo "Installing dependencies..."
 echo "-----------------------------------------"
-echo "Respond 'y' to each prompt to proceed"
+echo "Responding 'y' to each prompt to proceed"
 echo "#########################################"
 
 conda install -y -c rdkit rdkit
 conda install -y -c rdkit -c mordred-descriptor mordred
-conda install -y pandas=0.25.3 numpy=1.17.4 
+conda install -y pandas=0.25.3 numpy=1.17.4 xlrd
 conda install -y pytorch=1.3.1 cudatoolkit=10.1 torchvision -c pytorch
 conda install -y scikit-learn=0.22.1
 conda install -y matplotlib seaborn

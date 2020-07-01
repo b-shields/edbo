@@ -140,14 +140,15 @@ class objective:
             batch = domain_points.copy()
             batch[self.target] = new_results
             
-            # Unstandardize results and append to know outcomes
-            results = self.scaler.unstandardize_target(self.results, self.target)
-            data = pd.concat([results, batch])
+            if append == True:
+                # Unstandardize results and append to know outcomes
+                results = self.scaler.unstandardize_target(self.results, self.target)
+                data = pd.concat([results, batch])
             
-            # Restandardize
-            self.results = self.scaler.standardize_target(data, self.target)
-            self.X = to_torch(self.results.drop(self.target,axis=1), gpu=self.gpu)
-            self.y = to_torch(self.results[self.target], gpu=self.gpu).view(-1)
+                # Restandardize
+                self.results = self.scaler.standardize_target(data, self.target)
+                self.X = to_torch(self.results.drop(self.target,axis=1), gpu=self.gpu)
+                self.y = to_torch(self.results[self.target], gpu=self.gpu).view(-1)
             
             return batch
         

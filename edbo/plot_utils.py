@@ -1,8 +1,4 @@
 # -*- coding: utf-8 -*-
-"""
-Plot Utilities
-
-"""
 
 # Imports
 

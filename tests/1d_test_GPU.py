@@ -99,7 +99,7 @@ def BO_pred(acq_func, plot=False, return_='pred', append=False, init='external')
     elif return_ == 'plot':
         next_points = bo.obj.get_results(bo.proposed_experiments)
         mean = bo.obj.scaler.unstandardize(bo.model.predict(bo.obj.domain))
-        std = bo.obj.scaler.unstandardize(np.sqrt(bo.model.variance(bo.obj.domain))) * 2
+        std = np.sqrt(bo.model.variance(bo.obj.domain)) * bo.obj.scaler.std * 2
         samples = bo.obj.scaler.unstandardize(bo.model.sample_posterior(bo.obj.domain, batch_size=3))
 
         plt.figure(1, figsize=(6,6))

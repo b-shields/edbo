@@ -1,8 +1,4 @@
 # -*- coding: utf-8 -*-
-"""
-Torch Utilities
-
-"""
 
 # Imports
 
