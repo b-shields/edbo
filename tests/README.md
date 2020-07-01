@@ -13,25 +13,13 @@ Individual tests can be run using the pytest framework.
 ```bash
 pytest <test>.py
 
-# Note: Make sure pytest is installed (<tests>.sh scripts installs pytest and runs a set of tests).
+# Note: Make sure pytest is installed (basic_tests.sh script installs pytest and runs a set of tests).
 ```
 ### Run a test of the basic functionality
 
 ```bash
 cd ./edbo/tests
 sh basic_tests.sh
-
-# Note: If OS is Linux based you may need to chmod + tests.sh
-```
-
-### Run all tests
-
-Running all of the tests will take ~ 1h.
-
-```bash
-cd ./edbo/tests
-sh 1d_tests.sh
-sh express_tests.sh
 
 # Note: If OS is Linux based you may need to chmod + tests.sh
 ```

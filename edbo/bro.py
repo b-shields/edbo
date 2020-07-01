@@ -72,7 +72,7 @@ class BO:
             table for simulations.
         model : edbo.models 
             Surrogate model object used for Bayesian optimization. 
-            See bro.models for predefined models and specification of custom
+            See edbo.models for predefined models and specification of custom
             models.
         acquisition_function : str 
             Acquisition function used for for selecting a batch of domain 
@@ -522,7 +522,7 @@ class BO_express(BO):
             one-hot-encoded.
         model : edbo.models
             Surrogate model object used for Bayesian optimization. 
-            See bro.models for predefined models and specification of custom
+            See edbo.models for predefined models and specification of custom
             models.
         acquisition_function : str 
             Acquisition function used for for selecting a batch of domain 
