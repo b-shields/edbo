@@ -3,6 +3,8 @@ Experimental Design via Bayesian Optimization: *edbo* is a practical implimentai
 
 **Reference:** Shields, Benjamin J.; Stevens, Jason; Li, Jun; Parasram, Marvin; Damani, Farhan, Janey, Jacob; Adams, Ryan P.; Doyle, Abigail G. "Bayesian Reaction Optimization as A Tool for Chemical Synthesis" Manuscript Submitted.
 
+**Documentation:** https://b-shields.github.io/edbo/index.html
+
 ## Installation
 
 **Requirements:**
