@@ -5,7 +5,7 @@
 import pandas as pd
 import numpy as np
 
-import pickle
+import dill
 
 from gpytorch.priors import GammaPrior
 
@@ -401,7 +401,7 @@ class BO:
         """ 
         
         file = open(path, 'wb')
-        pickle.dump(self.__dict__, file)
+        dill.dump(self.__dict__, file)
         file.close()
     
     # Load BO instance
@@ -419,7 +419,7 @@ class BO:
         """ 
         
         file = open(path, 'rb')
-        tmp_dict = pickle.load(file)
+        tmp_dict = dill.load(file)
         file.close()          
 
         self.__dict__.update(tmp_dict) 
