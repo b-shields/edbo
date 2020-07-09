@@ -288,8 +288,9 @@ def expand_space(index, descriptor_dict):
     
     return descriptor_matrix
     
-def reaction_space(component_dict, encoding = {}, clean=True,
-                   decorrelation_threshold=0.9):
+def reaction_space(component_dict, encoding={}, descriptor_matrices={}, 
+                   clean=True, decorrelate=True, decorrelation_threshold=0.9, 
+                   standardize=True):
     """Build a reaction space object form component lists.
     
     Parameters
@@ -353,9 +354,12 @@ def reaction_space(component_dict, encoding = {}, clean=True,
     final_component_dict = {}
     for key in component_dict:
         
+        # If there is a descriptor matrix use it
+        if key in descriptor_matrices:
+            des = descriptor_matrices[key].copy()
+        
         # If there is an entry in encoding_dict follow the instruction
-        if key in encoding:
-            
+        elif key in encoding:
             series = pd.Series(component_dict[key], name=key)
             des = encode_component(series, encoding[key], name=key)
         
@@ -368,11 +372,15 @@ def reaction_space(component_dict, encoding = {}, clean=True,
         des = Data(des)
     
         # Preprocessing
-        des.clean()
-        try:
-            des.uncorrelated(threshold=decorrelation_threshold, target=None)
-        except:
-            None
+        if clean:
+            des.clean()
+        
+        if decorrelate:
+            try:
+                des.uncorrelated(threshold=decorrelation_threshold, target=None)
+            except:
+                None
+                
         des.data.insert(0, 
                         des.base_data.columns.values[0] + '_index', 
                         des.base_data.iloc[:,0])
@@ -392,9 +400,11 @@ def reaction_space(component_dict, encoding = {}, clean=True,
     reaction = Data(expand_space(index, descriptor_dict))
             
     # Preprocessing
-    reaction.clean()
+    if clean:
+        reaction.clean()
     reaction.drop(['index'])
-    reaction.standardize(target=None, scaler='minmax')
+    if standardize:
+        reaction.standardize(target=None, scaler='minmax')
     
     # Include descriptor_dict and index_headers
     reaction.descriptors = descriptor_dict

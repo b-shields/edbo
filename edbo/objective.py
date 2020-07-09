@@ -196,6 +196,7 @@ class objective:
     
     def results_input(self):
         """Return unstandardized results"""
+        
         if len(self.results) == 0:
             results = self.results
         else:
