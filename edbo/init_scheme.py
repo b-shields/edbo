@@ -21,29 +21,26 @@ class Init:
     Methods for selecting initial points on a user defined grid.
     """
 
-    def __init__(self, method, batch_size, distance='gower', visualize=True):
+    def __init__(self, method, batch_size, distance='gower'):
         """        
         Parameters
         ----------
         method : str
-            Sampling method. Opions include: 'rand', 'pam', 'kmeans', and 
+            Sampling method. Opions include: 'random', 'PAM', 'k-means', and 
             'external'.
         batch_size : int 
             Number of points to select.
         distance_metric : str 
             Distance metric to be used with PAM. Options include: 'gower', 
             'euclidean', and 'euclidean_square'.
-        visualize : bool 
-            Visualize color coded clusters selected via PAM or k-Means.
         
         """
         
         self.method = method
         self.batch_size = batch_size
         self.distance_metric = distance
-        self.visualize = visualize
 
-    def run(self, obj, seed=None, export_path=None):
+    def run(self, obj, seed=None, export_path=None, visualize=False):
         """Run initialization algorithm on user defined domain.
         
         Parameters
@@ -55,6 +52,10 @@ class Init:
             or centroids.
         export_path : None, str
             Path to export visualization if applicable.
+        visualize : bool
+            If initialization method is set to 'pam' or 'kmeans' and visualize
+            is set to True then a 2D embedding of the clustering results will
+            be generated.
         
         Returns
         ----------
@@ -62,28 +63,28 @@ class Init:
             Selected domain points.
         """
         
-        if self.method == 'rand':
+        if 'rand' in self.method.lower():
             self.experiments = rand(obj, self.batch_size, seed=seed)
             
-        elif self.method == 'pam':
+        elif self.method.lower() == 'pam' or 'medoids' in self.method.lower():
             self.experiments = PAM(obj, 
                                    self.batch_size, 
                                    distance=self.distance_metric,
-                                   visualize=self.visualize,
+                                   visualize=visualize,
                                    seed=seed,
                                    export_path=export_path)
             
-        elif self.method == 'kmeans':
+        elif 'means' in self.method.lower():
             self.experiments = k_means(obj, 
                                    self.batch_size, 
-                                   visualize=self.visualize,
+                                   visualize=visualize,
                                    seed=seed,
                                    export_path=export_path)
             
-        elif self.method == 'external':
+        elif 'ext' in self.method.lower():
             self.experiments = external_data(obj)
         else:
-            print('Init: Error specify valid method.')
+            print('edbo bot: Specify a valid initialization method.')
         
         return self.experiments
     
@@ -188,7 +189,7 @@ def PAM(obj, batch_size, distance='gower', visualize=True,
     
     PAM function returns medoids of learned clusters.
            
-    PAM implimentation from: https://pypi.org/project/pyclustering/
+    PAM implimentated using pyclustering: https://pypi.org/project/pyclustering/
         
     Parameters
     ----------
@@ -272,7 +273,7 @@ def k_means(obj, batch_size, visualize=True, seed=None, export_path=None,
     
     k_means function returns domain points closest to the means of learned clusters.
     
-    Implementation from sklearn.
+    k-means clustering implemented using scikit-learn: https://scikit-learn.org/stable/modules/generated/sklearn.cluster.KMeans.html
         
     Parameters
     ----------
@@ -305,7 +306,7 @@ def k_means(obj, batch_size, visualize=True, seed=None, export_path=None,
         scores.append(silhouette_avg)
     best = cluster_sizes[np.argmax(scores)]
     
-    print(best, 'clusters selected by silhouette score...')
+    print('edbo bot: ' + str(best) + ' clusters selected by silhouette score...')
     
     # Refit with best value
     clusterer = KMeans(n_clusters=best, random_state=seed, n_init=n_init)

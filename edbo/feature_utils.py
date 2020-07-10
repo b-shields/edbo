@@ -289,7 +289,7 @@ def expand_space(index, descriptor_dict):
     return descriptor_matrix
     
 def reaction_space(component_dict, encoding={}, descriptor_matrices={}, 
-                   clean=True, decorrelate=True, decorrelation_threshold=0.9, 
+                   clean=True, decorrelate=True, decorrelation_threshold=0.95, 
                    standardize=True):
     """Build a reaction space object form component lists.
     
@@ -330,11 +330,46 @@ def reaction_space(component_dict, encoding={}, descriptor_matrices={},
         string, ('numeric') numerical reaction parameters are used as passed.
         If no encoding is specified, the space will be automatically 
         one-hot-encoded.
+    descriptor_matrices : dict
+        Dictionary of descriptor matrices where keys correspond to 
+        reaction_components and values are pandas.DataFrames.
+            
+        Descriptor dictionary has the form: 
+                
+        Example
+        -------
+        User defined descriptor matrices ::
+                
+            # DataFrame where the first column is the identifier (e.g., a SMILES string)
+                
+            A = pd.DataFrame([....], columns=[...])
+                
+            --------------------------------------------
+            A_SMILES  |  des1  |  des2  | des3 | ...
+            --------------------------------------------
+                .         .        .       .     ...
+                .         .        .       .     ...
+            --------------------------------------------
+                
+            # Dictionary of descriptor matrices defined as DataFrames
+                
+            descriptor_matrices = {'A': A}
+            
+        Note
+        ----
+        If a key is present in both encoding and descriptor_matrices then 
+        the descriptor matrix will take precedence.
+    
     clean : bool
         If True, remove non-numeric and singular columns from the space.
+    decorrelate : bool
+        If True, iteratively remove features which are correlated with selected
+        descriptors.
     decorrelation_threshold : float
-        Iteratively features which have a correlation coefficient greater than
+        Remove features which have a correlation coefficient greater than
         specified value.
+    standardize : bool
+        If True, standardize descriptors on the unit hypercube.
     
     Returns
     ----------

@@ -30,6 +30,8 @@ class GP_Model:
     Provides a framework for specifiying exact GP models, hyperparameters, and 
     priors. This class also contains functions for training, sampling, forward 
     prediction, and variance estimation.
+    
+    Model implemented using GPyTorch: https://gpytorch.ai/
     """
     
     def __init__(self, X, y, training_iters=100, inference_type='MLE', 
@@ -274,7 +276,10 @@ class GP_Model:
 # Random Forest Model
 
 class RF_Model:
-    """Main random forest regression model used for Bayesian optimization."""
+    """Main random forest regression model used for Bayesian optimization.
+    
+    Model implemented using scikit-learn: https://scikit-learn.org/stable/modules/generated/sklearn.ensemble.RandomForestRegressor.html
+    """
     
     def __init__(self, X, y, n_jobs=-1, random_state=10, n_estimators=500,
 				 max_features='auto', max_depth=None, min_samples_leaf=1,
@@ -440,7 +445,10 @@ class RF_Model:
 # Bayesian Linear Model
 
 class Bayesian_Linear_Model:
-    """Bayesian linear regression object compatible with the BO framework."""
+    """Bayesian linear regression object compatible with the BO framework.
+    
+    Model implemented using scikit-learn: https://scikit-learn.org/stable/modules/generated/sklearn.linear_model.ARDRegression.html#sklearn.linear_model.ARDRegression
+    """
     
     def __init__(self, X, y, **kwargs):
         """
