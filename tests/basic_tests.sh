@@ -11,5 +11,9 @@ pip install pytest
 
 ################################################# Tests
 
-pytest test_test.py > test_test.py
-pytest 1d_test_fast.py > 1d_test_fast.log
+pytest acquisition_functions_gp.py > acquisition_functions_gp.log
+pytest acquisition_functions_rf.py > acquisition_functions_rf.log
+pytest autobuild_objective.py > autobuild_objective.log
+pytest init_methods_autobuilt.py > init_methods_autobuilt.log
+pytest simulate_BO.py > simulate_BO.log
+pytest simulate_BO_express.py > simulate_BO_express.log

@@ -1,10 +1,10 @@
 ############################################################################## Setup
 """
-1D Bayesian Optimization Test:
-(1) Gemerate 1D objective.
+ND Build and Bayesian Optimization Test:
+(1) Autobuild ND objective.
 (2) Initialize with data.
 (3) Test predictions, variance estimation, and sampling.
-(4) Run single iteration of each acquisition function.
+(4) Run single iteration of select acquisition functions.
 """
 
 # Imports
@@ -53,11 +53,11 @@ def BO_pred(acq_func, plot=False, return_='pred', append=False, init='rand'):
                     encoding=encoding,
                     acquisition_function=acq_func,
                     init_method=init,
-                    batch_size=random.sample(range(30),1)[0],
+                    batch_size=random.sample(range(1,20),1)[0],
                     computational_objective=random_result,
                     target='yield')
     
-    bo.init_sample(append=True)
+    bo.init_sample(append=True, visualize=plot)
     bo.run(append=append)
     
     # Check prediction
@@ -135,80 +135,19 @@ def BO_pred(acq_func, plot=False, return_='pred', append=False, init='rand'):
 
 ############################################################################## Tests
 
-# Test predicted mean and variance, sampling, and ploting
-
-def test_BO_pred_mean_TS():
-    assert BO_pred('TS', return_='pred')
-    
-def test_BO_var():
-    assert BO_pred('TS', return_='var')
-
-def test_BO_sample():
-    assert BO_pred('TS', return_='sample')
+# Test plotting for mean, variance, and sampling
     
 def test_BO_plot():
     assert BO_pred('TS', return_='plot')
     
-# Test simulations
-
-def test_BO_simulate_TS():
-    assert BO_pred('TS', return_='simulate')
-    
-def test_BO_simulate_EI():
-    assert BO_pred('EI', return_='simulate')
-    
-# Init methods
+# Init and simulate
 
 def test_BO_simulate_kmeans():
     assert BO_pred('EI', return_='simulate', init='kmeans')
 
 def test_BO_simulate_kmedoids():
-    assert BO_pred('EI', return_='simulate', init='pam')
+    assert BO_pred('TS', return_='simulate', init='pam')
     
 def test_BO_simulate_random():
-    assert BO_pred('EI', return_='simulate', init='rand')
-
-# Test different acquisition functions
-
-def test_BO_pred_mean_EI():
-    assert BO_pred('EI', return_='pred')
-
-def test_BO_pred_mean_PI():
-    assert BO_pred('PI', return_='pred')
-
-def test_BO_pred_mean_UCB():
-    assert BO_pred('UCB', return_='pred')
-
-def test_BO_pred_mean_rand():
-    assert BO_pred('rand', return_='pred')
-
-def test_BO_pred_mean_MeanMax():
-    assert BO_pred('MeanMax', return_='pred')
-
-def test_BO_pred_mean_VarMax():
-    assert BO_pred('VarMax', return_='pred')
-
-def test_BO_pred_mean_EI_TS():
-    assert BO_pred('EI-TS', return_='pred')
-
-def test_BO_pred_mean_PI_TS():
-    assert BO_pred('PI-TS', return_='pred')
-
-def test_BO_pred_mean_UCB_TS():
-    assert BO_pred('UCB-TS', return_='pred')
-
-def test_BO_pred_mean_rand_TS():
-    assert BO_pred('rand-TS', return_='pred')
-
-def test_BO_pred_mean_MeanMax_TS():
-    assert BO_pred('MeanMax-TS', return_='pred')
-
-def test_BO_pred_mean_VarMax_TS():
-    assert BO_pred('VarMax-TS', return_='pred')
-
-def test_BO_pred_mean_eps_greedy():
-    assert BO_pred('eps-greedy', return_='pred')
-
-
-
+    assert BO_pred('MeanMax', return_='simulate', init='rand')
 
