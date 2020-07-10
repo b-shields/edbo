@@ -1,7 +1,5 @@
 # edbo
 
-Experimental Design via Bayesian Optimization
-
 ## Testing
 
 This directory contains a number of tests of the basic functionality of *edbo*. Some of the functions test *edbo*'s plotting functions so you will need to close the plot windows as they pop up for tests to proceed.
