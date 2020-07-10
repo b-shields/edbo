@@ -1,8 +1,7 @@
 
 
 <!DOCTYPE html>
-<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
-<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<html class="writer-html5" lang="en" >
 <head>
   <meta charset="utf-8">
   
@@ -12,27 +11,29 @@
   
 
   
+  <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+
+  
   
   
   
 
   
-  <script type="text/javascript" src="_static/js/modernizr.min.js"></script>
+  <!--[if lt IE 9]>
+    <script src="_static/js/html5shiv.min.js"></script>
+  <![endif]-->
   
     
       <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
-        <script type="text/javascript" src="_static/jquery.js"></script>
-        <script type="text/javascript" src="_static/underscore.js"></script>
-        <script type="text/javascript" src="_static/doctools.js"></script>
-        <script type="text/javascript" src="_static/language_data.js"></script>
+        <script src="_static/jquery.js"></script>
+        <script src="_static/underscore.js"></script>
+        <script src="_static/doctools.js"></script>
+        <script src="_static/language_data.js"></script>
     
     <script type="text/javascript" src="_static/js/theme.js"></script>
 
     
-
-  
-  <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
-  <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
     <link rel="next" title="Surrogate Models" href="models.html" />
@@ -50,7 +51,7 @@
           
 
           
-            <a href="index.html" class="icon icon-home"> edbo
+            <a href="index.html" class="icon icon-home" alt="Documentation Home"> edbo
           
 
           
@@ -73,6 +74,7 @@
           
         </div>
 
+        
         <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
           
             
@@ -95,6 +97,7 @@
             
           
         </div>
+        
       </div>
     </nav>
 
@@ -133,7 +136,7 @@
 
   <ul class="wy-breadcrumbs">
     
-      <li><a href="index.html">Docs</a> &raquo;</li>
+      <li><a href="index.html" class="icon icon-home"></a> &raquo;</li>
         
           <li><a href="modules.html">Bayesian Reaction Optimization</a> &raquo;</li>
         
@@ -158,31 +161,30 @@
             
   <div class="section" id="module-edbo.init_scheme">
 <span id="initialization-schemes"></span><h1>Initialization Schemes<a class="headerlink" href="#module-edbo.init_scheme" title="Permalink to this headline">¶</a></h1>
-<dl class="class">
+<dl class="py class">
 <dt id="edbo.init_scheme.Init">
-<em class="property">class </em><code class="sig-prename descclassname">edbo.init_scheme.</code><code class="sig-name descname">Init</code><span class="sig-paren">(</span><em class="sig-param">method</em>, <em class="sig-param">batch_size</em>, <em class="sig-param">distance='gower'</em>, <em class="sig-param">visualize=True</em><span class="sig-paren">)</span><a class="headerlink" href="#edbo.init_scheme.Init" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><code class="sig-prename descclassname">edbo.init_scheme.</code><code class="sig-name descname">Init</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">method</span></em>, <em class="sig-param"><span class="n">batch_size</span></em>, <em class="sig-param"><span class="n">distance</span><span class="o">=</span><span class="default_value">'gower'</span></em><span class="sig-paren">)</span><a class="headerlink" href="#edbo.init_scheme.Init" title="Permalink to this definition">¶</a></dt>
 <dd><p>Class represents different initialization schemes.</p>
 <p>Methods for selecting initial points on a user defined grid.</p>
-<dl class="method">
+<dl class="py method">
 <dt id="edbo.init_scheme.Init.__init__">
-<code class="sig-name descname">__init__</code><span class="sig-paren">(</span><em class="sig-param">method</em>, <em class="sig-param">batch_size</em>, <em class="sig-param">distance='gower'</em>, <em class="sig-param">visualize=True</em><span class="sig-paren">)</span><a class="headerlink" href="#edbo.init_scheme.Init.__init__" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">__init__</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">method</span></em>, <em class="sig-param"><span class="n">batch_size</span></em>, <em class="sig-param"><span class="n">distance</span><span class="o">=</span><span class="default_value">'gower'</span></em><span class="sig-paren">)</span><a class="headerlink" href="#edbo.init_scheme.Init.__init__" title="Permalink to this definition">¶</a></dt>
 <dd><dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>method</strong> (<em>str</em>) – Sampling method. Opions include: ‘rand’, ‘pam’, ‘kmeans’, and
+<li><p><strong>method</strong> (<em>str</em>) – Sampling method. Opions include: ‘random’, ‘PAM’, ‘k-means’, and
 ‘external’.</p></li>
 <li><p><strong>batch_size</strong> (<em>int</em>) – Number of points to select.</p></li>
 <li><p><strong>distance_metric</strong> (<em>str</em>) – Distance metric to be used with PAM. Options include: ‘gower’,
 ‘euclidean’, and ‘euclidean_square’.</p></li>
-<li><p><strong>visualize</strong> (<em>bool</em>) – Visualize color coded clusters selected via PAM or k-Means.</p></li>
 </ul>
 </dd>
 </dl>
 </dd></dl>
 
-<dl class="method">
+<dl class="py method">
 <dt id="edbo.init_scheme.Init.run">
-<code class="sig-name descname">run</code><span class="sig-paren">(</span><em class="sig-param">obj</em>, <em class="sig-param">seed=None</em>, <em class="sig-param">export_path=None</em><span class="sig-paren">)</span><a class="headerlink" href="#edbo.init_scheme.Init.run" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">run</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">obj</span></em>, <em class="sig-param"><span class="n">seed</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">export_path</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">visualize</span><span class="o">=</span><span class="default_value">False</span></em><span class="sig-paren">)</span><a class="headerlink" href="#edbo.init_scheme.Init.run" title="Permalink to this definition">¶</a></dt>
 <dd><p>Run initialization algorithm on user defined domain.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
@@ -191,6 +193,9 @@
 <li><p><strong>seed</strong> (<em>None</em><em>, </em><em>int</em>) – Random seed for random selection and initial choice of medoids
 or centroids.</p></li>
 <li><p><strong>export_path</strong> (<em>None</em><em>, </em><em>str</em>) – Path to export visualization if applicable.</p></li>
+<li><p><strong>visualize</strong> (<em>bool</em>) – If initialization method is set to ‘pam’ or ‘kmeans’ and visualize
+is set to True then a 2D embedding of the clustering results will
+be generated.</p></li>
 </ul>
 </dd>
 <dt class="field-even">Returns</dt>
@@ -202,9 +207,9 @@ or centroids.</p></li>
 </dl>
 </dd></dl>
 
-<dl class="method">
+<dl class="py method">
 <dt id="edbo.init_scheme.Init.plot_choices">
-<code class="sig-name descname">plot_choices</code><span class="sig-paren">(</span><em class="sig-param">obj</em>, <em class="sig-param">export_path=None</em><span class="sig-paren">)</span><a class="headerlink" href="#edbo.init_scheme.Init.plot_choices" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">plot_choices</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">obj</span></em>, <em class="sig-param"><span class="n">export_path</span><span class="o">=</span><span class="default_value">None</span></em><span class="sig-paren">)</span><a class="headerlink" href="#edbo.init_scheme.Init.plot_choices" title="Permalink to this definition">¶</a></dt>
 <dd><p>Plot low dimensional embeddingd of initialization points in domain.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
@@ -224,9 +229,9 @@ or centroids.</p></li>
 
 </dd></dl>
 
-<dl class="function">
+<dl class="py function">
 <dt id="edbo.init_scheme.rand">
-<code class="sig-prename descclassname">edbo.init_scheme.</code><code class="sig-name descname">rand</code><span class="sig-paren">(</span><em class="sig-param">obj</em>, <em class="sig-param">batch_size</em>, <em class="sig-param">seed=None</em><span class="sig-paren">)</span><a class="headerlink" href="#edbo.init_scheme.rand" title="Permalink to this definition">¶</a></dt>
+<code class="sig-prename descclassname">edbo.init_scheme.</code><code class="sig-name descname">rand</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">obj</span></em>, <em class="sig-param"><span class="n">batch_size</span></em>, <em class="sig-param"><span class="n">seed</span><span class="o">=</span><span class="default_value">None</span></em><span class="sig-paren">)</span><a class="headerlink" href="#edbo.init_scheme.rand" title="Permalink to this definition">¶</a></dt>
 <dd><p>Random selection of points.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
@@ -245,9 +250,9 @@ or centroids.</p></li>
 </dl>
 </dd></dl>
 
-<dl class="function">
+<dl class="py function">
 <dt id="edbo.init_scheme.external_data">
-<code class="sig-prename descclassname">edbo.init_scheme.</code><code class="sig-name descname">external_data</code><span class="sig-paren">(</span><em class="sig-param">obj</em><span class="sig-paren">)</span><a class="headerlink" href="#edbo.init_scheme.external_data" title="Permalink to this definition">¶</a></dt>
+<code class="sig-prename descclassname">edbo.init_scheme.</code><code class="sig-name descname">external_data</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">obj</span></em><span class="sig-paren">)</span><a class="headerlink" href="#edbo.init_scheme.external_data" title="Permalink to this definition">¶</a></dt>
 <dd><p>External data reader.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
@@ -262,12 +267,12 @@ or centroids.</p></li>
 </dl>
 </dd></dl>
 
-<dl class="function">
+<dl class="py function">
 <dt id="edbo.init_scheme.PAM">
-<code class="sig-prename descclassname">edbo.init_scheme.</code><code class="sig-name descname">PAM</code><span class="sig-paren">(</span><em class="sig-param">obj</em>, <em class="sig-param">batch_size</em>, <em class="sig-param">distance='gower'</em>, <em class="sig-param">visualize=True</em>, <em class="sig-param">seed=None</em>, <em class="sig-param">export_path=None</em><span class="sig-paren">)</span><a class="headerlink" href="#edbo.init_scheme.PAM" title="Permalink to this definition">¶</a></dt>
+<code class="sig-prename descclassname">edbo.init_scheme.</code><code class="sig-name descname">PAM</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">obj</span></em>, <em class="sig-param"><span class="n">batch_size</span></em>, <em class="sig-param"><span class="n">distance</span><span class="o">=</span><span class="default_value">'gower'</span></em>, <em class="sig-param"><span class="n">visualize</span><span class="o">=</span><span class="default_value">True</span></em>, <em class="sig-param"><span class="n">seed</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">export_path</span><span class="o">=</span><span class="default_value">None</span></em><span class="sig-paren">)</span><a class="headerlink" href="#edbo.init_scheme.PAM" title="Permalink to this definition">¶</a></dt>
 <dd><p>Partitioning around medoids algorithm.</p>
 <p>PAM function returns medoids of learned clusters.</p>
-<p>PAM implimentation from: <a class="reference external" href="https://pypi.org/project/pyclustering/">https://pypi.org/project/pyclustering/</a></p>
+<p>PAM implimentated using pyclustering: <a class="reference external" href="https://pypi.org/project/pyclustering/">https://pypi.org/project/pyclustering/</a></p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
@@ -290,12 +295,12 @@ of clusters. PAM returns the medoids.</p></li>
 </dl>
 </dd></dl>
 
-<dl class="function">
+<dl class="py function">
 <dt id="edbo.init_scheme.k_means">
-<code class="sig-prename descclassname">edbo.init_scheme.</code><code class="sig-name descname">k_means</code><span class="sig-paren">(</span><em class="sig-param">obj</em>, <em class="sig-param">batch_size</em>, <em class="sig-param">visualize=True</em>, <em class="sig-param">seed=None</em>, <em class="sig-param">export_path=None</em>, <em class="sig-param">n_init=1</em>, <em class="sig-param">return_clusters=False</em>, <em class="sig-param">return_centroids=False</em><span class="sig-paren">)</span><a class="headerlink" href="#edbo.init_scheme.k_means" title="Permalink to this definition">¶</a></dt>
+<code class="sig-prename descclassname">edbo.init_scheme.</code><code class="sig-name descname">k_means</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">obj</span></em>, <em class="sig-param"><span class="n">batch_size</span></em>, <em class="sig-param"><span class="n">visualize</span><span class="o">=</span><span class="default_value">True</span></em>, <em class="sig-param"><span class="n">seed</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">export_path</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">n_init</span><span class="o">=</span><span class="default_value">1</span></em>, <em class="sig-param"><span class="n">return_clusters</span><span class="o">=</span><span class="default_value">False</span></em>, <em class="sig-param"><span class="n">return_centroids</span><span class="o">=</span><span class="default_value">False</span></em><span class="sig-paren">)</span><a class="headerlink" href="#edbo.init_scheme.k_means" title="Permalink to this definition">¶</a></dt>
 <dd><p>K-Means algorithm.</p>
 <p>k_means function returns domain points closest to the means of learned clusters.</p>
-<p>Implementation from sklearn.</p>
+<p>k-means clustering implemented using scikit-learn: <a class="reference external" href="https://scikit-learn.org/stable/modules/generated/sklearn.cluster.KMeans.html">https://scikit-learn.org/stable/modules/generated/sklearn.cluster.KMeans.html</a></p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
@@ -338,11 +343,19 @@ of clusters. PAM returns the medoids.</p></li>
 
   <div role="contentinfo">
     <p>
+        
         &copy; Copyright 2020, Benjamin J. Shields
 
     </p>
   </div>
-  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+    
+    
+    
+    Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a
+    
+    <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a>
+    
+    provided by <a href="https://readthedocs.org">Read the Docs</a>. 
 
 </footer>
 
@@ -353,7 +366,6 @@ of clusters. PAM returns the medoids.</p></li>
 
   </div>
   
-
 
   <script type="text/javascript">
       jQuery(function () {

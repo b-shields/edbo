@@ -1,8 +1,7 @@
 
 
 <!DOCTYPE html>
-<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
-<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<html class="writer-html5" lang="en" >
 <head>
   <meta charset="utf-8">
   
@@ -12,27 +11,29 @@
   
 
   
+  <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+
+  
   
   
   
 
   
-  <script type="text/javascript" src="_static/js/modernizr.min.js"></script>
+  <!--[if lt IE 9]>
+    <script src="_static/js/html5shiv.min.js"></script>
+  <![endif]-->
   
     
       <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
-        <script type="text/javascript" src="_static/jquery.js"></script>
-        <script type="text/javascript" src="_static/underscore.js"></script>
-        <script type="text/javascript" src="_static/doctools.js"></script>
-        <script type="text/javascript" src="_static/language_data.js"></script>
+        <script src="_static/jquery.js"></script>
+        <script src="_static/underscore.js"></script>
+        <script src="_static/doctools.js"></script>
+        <script src="_static/language_data.js"></script>
     
     <script type="text/javascript" src="_static/js/theme.js"></script>
 
     
-
-  
-  <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
-  <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
     <link rel="next" title="Initialization Schemes" href="init_scheme.html" />
@@ -50,7 +51,7 @@
           
 
           
-            <a href="index.html" class="icon icon-home"> edbo
+            <a href="index.html" class="icon icon-home" alt="Documentation Home"> edbo
           
 
           
@@ -73,6 +74,7 @@
           
         </div>
 
+        
         <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
           
             
@@ -95,6 +97,7 @@
             
           
         </div>
+        
       </div>
     </nav>
 
@@ -133,7 +136,7 @@
 
   <ul class="wy-breadcrumbs">
     
-      <li><a href="index.html">Docs</a> &raquo;</li>
+      <li><a href="index.html" class="icon icon-home"></a> &raquo;</li>
         
           <li><a href="modules.html">Bayesian Reaction Optimization</a> &raquo;</li>
         
@@ -158,7 +161,7 @@
             
   <div class="section" id="module-edbo.objective">
 <span id="optimization-objective"></span><h1>Optimization Objective<a class="headerlink" href="#module-edbo.objective" title="Permalink to this headline">¶</a></h1>
-<dl class="class">
+<dl class="py class">
 <dt id="edbo.objective.objective">
 <em class="property">class </em><code class="sig-prename descclassname">edbo.objective.</code><code class="sig-name descname">objective</code><span class="sig-paren">(</span><em class="sig-param">results_path=None</em>, <em class="sig-param">results=Empty DataFrame Columns: [] Index: []</em>, <em class="sig-param">domain_path=None</em>, <em class="sig-param">domain=Empty DataFrame Columns: [] Index: []</em>, <em class="sig-param">exindex_path=None</em>, <em class="sig-param">exindex=Empty DataFrame Columns: [] Index: []</em>, <em class="sig-param">target=-1</em>, <em class="sig-param">gpu=False</em>, <em class="sig-param">computational_objective=None</em><span class="sig-paren">)</span><a class="headerlink" href="#edbo.objective.objective" title="Permalink to this definition">¶</a></dt>
 <dd><p>Objective funciton data container and operations.</p>
@@ -167,7 +170,7 @@
 <p>Objective internally standardizes response values to zero mean and unit
 variance.</p>
 </div>
-<dl class="method">
+<dl class="py method">
 <dt id="edbo.objective.objective.__init__">
 <code class="sig-name descname">__init__</code><span class="sig-paren">(</span><em class="sig-param">results_path=None</em>, <em class="sig-param">results=Empty DataFrame Columns: [] Index: []</em>, <em class="sig-param">domain_path=None</em>, <em class="sig-param">domain=Empty DataFrame Columns: [] Index: []</em>, <em class="sig-param">exindex_path=None</em>, <em class="sig-param">exindex=Empty DataFrame Columns: [] Index: []</em>, <em class="sig-param">target=-1</em>, <em class="sig-param">gpu=False</em>, <em class="sig-param">computational_objective=None</em><span class="sig-paren">)</span><a class="headerlink" href="#edbo.objective.objective.__init__" title="Permalink to this definition">¶</a></dt>
 <dd><dl class="field-list simple">
@@ -195,30 +198,54 @@ column of the DataFrame will be set as the target.</p></li>
 </dl>
 </dd></dl>
 
-<dl class="method">
+<dl class="py method">
 <dt id="edbo.objective.objective.get_results">
-<code class="sig-name descname">get_results</code><span class="sig-paren">(</span><em class="sig-param">domain_points</em>, <em class="sig-param">append=False</em><span class="sig-paren">)</span><a class="headerlink" href="#edbo.objective.objective.get_results" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">get_results</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">domain_points</span></em>, <em class="sig-param"><span class="n">append</span><span class="o">=</span><span class="default_value">False</span></em><span class="sig-paren">)</span><a class="headerlink" href="#edbo.objective.objective.get_results" title="Permalink to this definition">¶</a></dt>
 <dd><p>Returns target values corresponding to domain_points.</p>
-<dl class="simple">
-<dt>domain_points<span class="classifier">pandas.DataFrame</span></dt><dd><p>Points from experiment index to retrieve responses for. If the
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>domain_points</strong> (<em>pandas.DataFrame</em>) – Points from experiment index to retrieve responses for. If the
 objective is a computational function, run function and return
-responses.</p>
+responses.</p></li>
+<li><p><strong>append</strong> (<em>bool</em>) – If true append points to results and update X and y.</p></li>
+</ul>
 </dd>
-<dt>append<span class="classifier">bool</span></dt><dd><p>If true append points to results and update X and y.</p>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>Proposed experiments.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>pandas.DataFrame</p>
 </dd>
 </dl>
 </dd></dl>
 
-<dl class="method">
+<dl class="py method">
 <dt id="edbo.objective.objective.clear_results">
 <code class="sig-name descname">clear_results</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#edbo.objective.objective.clear_results" title="Permalink to this definition">¶</a></dt>
 <dd><p>Clear results and reset X and y.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p></p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p>None</p>
+</dd>
+</dl>
 </dd></dl>
 
-<dl class="method">
+<dl class="py method">
 <dt id="edbo.objective.objective.results_input">
 <code class="sig-name descname">results_input</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#edbo.objective.objective.results_input" title="Permalink to this definition">¶</a></dt>
-<dd><p>Return unstandardized results</p>
+<dd><p>Return unstandardized results.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>Unstandardized results.</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p>pandas.DataFrame</p>
+</dd>
+</dl>
 </dd></dl>
 
 </dd></dl>
@@ -245,11 +272,19 @@ responses.</p>
 
   <div role="contentinfo">
     <p>
+        
         &copy; Copyright 2020, Benjamin J. Shields
 
     </p>
   </div>
-  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+    
+    
+    
+    Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a
+    
+    <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a>
+    
+    provided by <a href="https://readthedocs.org">Read the Docs</a>. 
 
 </footer>
 
@@ -260,7 +295,6 @@ responses.</p>
 
   </div>
   
-
 
   <script type="text/javascript">
       jQuery(function () {
