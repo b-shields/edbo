@@ -5,6 +5,8 @@
 import pandas as pd
 import torch
 import numpy as np
+from os import listdir
+from os.path import isdir, isfile
 
 # Load data from csv or excel file
 
@@ -32,25 +34,24 @@ def load_experiment_results(experiment_results_path):
     experiment_results_path folder.
     """
     
-    from os import listdir
-    from os.path import isdir
-    
     experiment_results_path = str(experiment_results_path)
     
     if isdir(experiment_results_path):
-        files = listdir(experiment_results_path)
+        files = [experiment_results_path + '/' + f for f in listdir(experiment_results_path)]
+    elif isfile(experiment_results_path):
+        files = [experiment_results_path]    
     else:
         files = []
-        print('Not a directory.')
+        print('Not a directory or file.')
     
     if len(files) > 0:
-        data = load_csv_or_excel(experiment_results_path + '/' + files[0])
+        data = load_csv_or_excel(files[0])
     else:
         data = pd.DataFrame()
         
     if len(files) > 1:
         for i in range(1,len(files)):
-            data_i = load_csv_or_excel(experiment_results_path + '/' + files[i])
+            data_i = load_csv_or_excel(files[i])
             data = pd.concat([data, data_i])
     
     return data.reset_index(drop=True)

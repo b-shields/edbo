@@ -121,12 +121,19 @@ class objective:
     def get_results(self, domain_points, append=False):
         """Returns target values corresponding to domain_points. 
         
+        Parameters
+        ----------
         domain_points : pandas.DataFrame
             Points from experiment index to retrieve responses for. If the
             objective is a computational function, run function and return
             responses.
         append : bool
             If true append points to results and update X and y.
+        
+        Returns
+        ----------
+        pandas.DataFrame
+            Proposed experiments.
         """
         
         # Computational objective
@@ -155,7 +162,7 @@ class objective:
         # Human in the loop objective
         
         if type(self.exindex) == type(None):
-            return print("Error: no experiment index")
+            return print("edbo bot: Error no experiment index")
         
         # Retrieve domain points from index
         
@@ -186,7 +193,12 @@ class objective:
     # Clear results
     
     def clear_results(self):
-        """Clear results and reset X and y."""
+        """Clear results and reset X and y.
+        
+        Returns
+        ----------
+        None
+        """
         
         self.results = pd.DataFrame()
         self.X = to_torch([], gpu=self.gpu)
@@ -195,7 +207,14 @@ class objective:
     # Return unstandardized results
     
     def results_input(self):
-        """Return unstandardized results"""
+        """Return unstandardized results.
+        
+        Returns
+        ----------
+        pandas.DataFrame
+            Unstandardized results.
+        """
+        
         if len(self.results) == 0:
             results = self.results
         else:

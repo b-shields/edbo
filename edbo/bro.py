@@ -155,7 +155,8 @@ class BO:
         self.noise_prior = noise_prior
         
     # Initial samples using init sequence
-    def init_sample(self, seed=None, append=False, export_path=None):
+    def init_sample(self, seed=None, append=False, export_path=None,
+                    visualize=False):
         """Generate initial samples via an initialization method.
         
         Parameters
@@ -168,6 +169,10 @@ class BO:
         export_path : str 
             Path to export SVG of clustering results if pam or kmeans methods 
             are used for selecting initial points.
+        visualize : bool
+            If initialization method is set to 'pam' or 'kmeans' and visualize
+            is set to True then a 2D embedding of the clustering results will
+            be generated.
         
         Returns
         ----------
@@ -180,7 +185,8 @@ class BO:
             self.obj.clear_results()
         self.proposed_experiments = self.init_seq.run(self.obj, 
                                                       seed=seed, 
-                                                      export_path=export_path)
+                                                      export_path=export_path,
+                                                      visualize=visualize)
         
         # Append to know results
         if append == True and self.init_seq.method != 'external':
@@ -459,7 +465,8 @@ class BO_express(BO):
                        'CC(C)c1cc(C(C)C)c(c(c1)C(C)C)c2ccccc2P(C3CCCCC3)C4CCCCC4' # X-Phos
                        ],
             'concentration':[0.1, 0.2, 0.3],
-            'temperature': [20, 30, 40]}
+            'temperature': [20, 30, 40],
+            'additive': '<defined in descriptor_matrices>'}
         
         # (2) Define a dictionary of desired encodings
         encoding={'aryl_halide':'resolve',
@@ -469,9 +476,19 @@ class BO_express(BO):
                   'concentration':'numeric',
                   'temperature':'numeric'}
         
-        # (3) Instatiate BO_express
+        # (3) Add any user define descriptor matrices directly
+        import pandas as pd
+        
+        A = pd.DataFrame(
+                 [['a1', 1,2,3,4],['a2',1,5,2,0],['a3', 3,5,1,25]],
+                 columns=['additive', 'A_des1', 'A_des2', 'A_des3', 'A_des4'])
+        
+        descriptor_matrices = {'additive': A}
+        
+        # (4) Instatiate BO_express
         bo = BO_express(reaction_components=reaction_components, 
                         encoding=encoding,
+                        descriptor_matrices=descriptor_matrices,
                         batch_size=10,
                         acquisition_function='TS',
                         target='yield')
@@ -479,7 +496,7 @@ class BO_express(BO):
     """
     
     def __init__(self,
-                 reaction_components={}, encoding={},
+                 reaction_components={}, encoding={}, descriptor_matrices={},
                  model=GP_Model, acquisition_function='EI', init_method='rand', 
                  target=-1, batch_size=5, computational_objective=None):
         """        
@@ -500,6 +517,12 @@ class BO_express(BO):
             
             Components can be specified as: (1) arbitrary names, (2) chemical 
             names or nicknames, (3) SMILES strings, or (4) numeric values.
+            
+            Note
+            ----
+            A reaction component will not be encoded unless its key is present
+            in the reaction_components dictionary.
+            
         encodings : dict
             Dictionary of encodings with keys corresponding to reaction_components.
             Encoding dictionary has the form: 
@@ -520,6 +543,36 @@ class BO_express(BO):
             string, ('numeric') numerical reaction parameters are used as passed.
             If no encoding is specified, the space will be automatically 
             one-hot-encoded.
+        descriptor_matrices : dict
+            Dictionary of descriptor matrices where keys correspond to 
+            reaction_components and values are pandas.DataFrames.
+            
+            Descriptor dictionary has the form: 
+                
+            Example
+            -------
+            User defined descriptor matrices ::
+                
+                # DataFrame where the first column is the identifier (e.g., a SMILES string)
+                
+                A = pd.DataFrame([....], columns=[...])
+                
+                --------------------------------------------
+                  A_SMILES  |  des1  |  des2  | des3 | ...
+                --------------------------------------------
+                      .         .        .       .     ...
+                      .         .        .       .     ...
+                --------------------------------------------
+                
+                # Dictionary of descriptor matrices defined as DataFrames
+                
+                descriptor_matrices = {'A': A}
+            
+            Note
+            ----
+            If a key is present in both encoding and descriptor_matrices then 
+            the descriptor matrix will take precedence.
+            
         model : edbo.models
             Surrogate model object used for Bayesian optimization. 
             See edbo.models for predefined models and specification of custom
@@ -560,10 +613,12 @@ class BO_express(BO):
             for key in reaction_components:
                 N *= len(reaction_components[key])
             
-            self.edbo_bot.talk('Building ' + str(N) + ' experiment reaction space...')
+            self.edbo_bot.talk('Building reaction space...')
 
-        # Build the search space
-        self.reaction = reaction_space(reaction_components, encoding=encoding)
+        # Build the search space (clean, decorrelate, standardize)
+        self.reaction = reaction_space(reaction_components, 
+                                       encoding=encoding,
+                                       descriptor_matrices=descriptor_matrices)
         
         # Determine appropriate priors
         mordred = False

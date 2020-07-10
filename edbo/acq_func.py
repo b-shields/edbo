@@ -10,6 +10,89 @@ from random import sample as random_sample
 
 from .pd_utils import to_torch, join_to_df, argmax, complement, sample, torch_to_numpy
 
+# Main acquisition class
+
+class acquisition:
+    """Class represents the main acquisition function module.
+    
+    Class provides a container for different acquisition functions
+    availible for Bayesian optimization.
+    """
+    
+    def __init__(self, function, batch_size=1, duplicates=False):
+        """
+        Parameters
+        ----------
+        function : str
+            Acquisition function to be used. Options include: 'TS', 'EI', 'PI'
+            'UCB', 'EI-TS', 'PI-TS', 'UCB-TS', 'rand-TS', 'MeanMax-TS',
+            'VarMax-TS', 'MeanMax', 'VarMax', 'rand', and 'eps-greedy'.
+        batch_size : int
+            Number of points to select.
+        duplicates : bool
+            Select duplicate domain points.
+        
+        """
+        
+        if function.lower() == 'ts':
+            self.function = thompson_sampling(batch_size, duplicates)
+        elif function.lower() == 'ei':
+            self.function = Kriging_believer(expected_improvement, 
+                                             batch_size, 
+                                             duplicates)
+        elif function.lower() == 'pi':
+            self.function = Kriging_believer(probability_of_improvement, 
+                                             batch_size, 
+                                             duplicates)
+        elif function.lower() == 'ucb':
+            self.function = Kriging_believer(upper_confidence_bound, 
+                                             batch_size, 
+                                             duplicates)
+        elif function.lower() == 'ei-ts':
+            self.function = hybrid_TS('EI', batch_size, duplicates)
+        elif function.lower() == 'pi-ts':
+            self.function = hybrid_TS('PI', batch_size, duplicates)
+        elif function.lower() == 'ucb-ts':
+            self.function = hybrid_TS('UCB', batch_size, duplicates)
+        elif function.lower() == 'rand-ts':
+            self.function = hybrid_TS('Random', batch_size, duplicates)
+        elif function.lower() == 'meanmax-ts':
+            self.function = hybrid_TS('MeanMax', batch_size, duplicates)
+        elif function.lower() == 'varmax-ts':
+            self.function = hybrid_TS('VarMax', batch_size, duplicates)   
+        elif function.lower() == 'meanmax':
+            self.function = Kriging_believer(mean, 
+                                             batch_size, 
+                                             duplicates)
+        elif function.lower() == 'varmax':
+            self.function = Kriging_believer(variance, 
+                                             batch_size, 
+                                             duplicates)
+        elif function.lower() == 'rand':
+            self.function = random(batch_size, duplicates)
+        elif 'greedy' in function.lower():
+            self.function = eps_greedy(batch_size, duplicates)
+        else:
+            print('edbo bot: Specify a valid acquisition function.')
+    
+    def evaluate(self, model, obj):
+        """Run the selected acquisition function.
+        
+        Parameters
+        ----------
+        model : edbo.models
+            Trained model.
+        obj : edbo.objective
+            Objective object containining data and scalers.
+        
+        Returns
+        ----------
+        pandas.DataFrame 
+            Proposed experiments.
+        """
+        
+        return self.function.run(model, obj)
+    
 # Thomposon Sampling
 
 class thompson_sampling:
@@ -278,8 +361,6 @@ def probability_of_improvement(model, obj, jitter=1e-2):
     
     PI favors exploitation of exporation. Equally rewards any
     improvement over the best observed value.
-    
-    Implimentation derived from: https://github.com/maxim5/hyper-engine
            
     Parameters
     ----------
@@ -322,8 +403,6 @@ def probability_of_improvement(model, obj, jitter=1e-2):
 
 def upper_confidence_bound(model, obj, jitter=1e-2, delta=0.5):
     """Computes upper confidence bound.
-    
-    Implimentation derived from: https://github.com/maxim5/hyper-engine
         
     Parameters
     ----------
@@ -481,7 +560,7 @@ class Kriging_believer:
                 
             except Exception as e:
                 print(e)
-                print('Defaulting to previous iterations hyperparameters...')
+                print('edbo bot: Defaulting to previous iterations hyperparameters...')
                 del(model.__dict__)
                 model.__init__(X, y)
 
@@ -758,89 +837,5 @@ class random:
                                     obj.results.drop(obj.target, axis=1))
         
         return candidates.sample(self.batch_size)
-
-# Main acquisition class
-
-class acquisition:
-    """Class represents the main acquisition function module.
-    
-    Class provides a container for different acquisition functions
-    availible for Bayesian optimization.
-    """
-    
-    def __init__(self, function, batch_size=1, duplicates=False):
-        """
-        Parameters
-        ----------
-        function : str
-            Acquisition function to be used. Options include: 'TS', 'EI', 'PI'
-            'UCB', 'EI-TS', 'PI-TS', 'UCB-TS', 'rand-TS', 'MeanMax-TS',
-            'VarMax-TS', 'MeanMax', 'VarMax', 'rand', and 'eps-greedy'.
-        batch_size : int
-            Number of points to select.
-        duplicates : bool
-            Select duplicate domain points.
-        
-        """
-        
-        if function == 'TS':
-            self.function = thompson_sampling(batch_size, duplicates)
-        elif function == 'EI':
-            self.function = Kriging_believer(expected_improvement, 
-                                             batch_size, 
-                                             duplicates)
-        elif function == 'PI':
-            self.function = Kriging_believer(probability_of_improvement, 
-                                             batch_size, 
-                                             duplicates)
-        elif function == 'UCB':
-            self.function = Kriging_believer(upper_confidence_bound, 
-                                             batch_size, 
-                                             duplicates)
-        elif function == 'EI-TS':
-            self.function = hybrid_TS('EI', batch_size, duplicates)
-        elif function == 'PI-TS':
-            self.function = hybrid_TS('PI', batch_size, duplicates)
-        elif function == 'UCB-TS':
-            self.function = hybrid_TS('UCB', batch_size, duplicates)
-        elif function == 'rand-TS':
-            self.function = hybrid_TS('Random', batch_size, duplicates)
-        elif function == 'MeanMax-TS':
-            self.function = hybrid_TS('MeanMax', batch_size, duplicates)
-        elif function == 'VarMax-TS':
-            self.function = hybrid_TS('VarMax', batch_size, duplicates)   
-        elif function == 'MeanMax':
-            self.function = Kriging_believer(mean, 
-                                             batch_size, 
-                                             duplicates)
-        elif function == 'VarMax':
-            self.function = Kriging_believer(variance, 
-                                             batch_size, 
-                                             duplicates)
-        elif function == 'rand':
-            self.function = random(batch_size, duplicates)
-        elif function == 'eps-greedy':
-            self.function = eps_greedy(batch_size, duplicates)
-        else:
-            print('Error: invalid acquisition type')
-    
-    def evaluate(self, model, obj):
-        """Run the selected acquisition function.
-        
-        Parameters
-        ----------
-        model : edbo.models
-            Trained model.
-        obj : edbo.objective
-            Objective object containining data and scalers.
-        
-        Returns
-        ----------
-        pandas.DataFrame 
-            Proposed experiments.
-        """
-        
-        return self.function.run(model, obj)
-    
 
     

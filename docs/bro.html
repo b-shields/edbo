@@ -1,8 +1,7 @@
 
 
 <!DOCTYPE html>
-<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
-<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<html class="writer-html5" lang="en" >
 <head>
   <meta charset="utf-8">
   
@@ -12,27 +11,29 @@
   
 
   
+  <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+
+  
   
   
   
 
   
-  <script type="text/javascript" src="_static/js/modernizr.min.js"></script>
+  <!--[if lt IE 9]>
+    <script src="_static/js/html5shiv.min.js"></script>
+  <![endif]-->
   
     
       <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
-        <script type="text/javascript" src="_static/jquery.js"></script>
-        <script type="text/javascript" src="_static/underscore.js"></script>
-        <script type="text/javascript" src="_static/doctools.js"></script>
-        <script type="text/javascript" src="_static/language_data.js"></script>
+        <script src="_static/jquery.js"></script>
+        <script src="_static/underscore.js"></script>
+        <script src="_static/doctools.js"></script>
+        <script src="_static/language_data.js"></script>
     
     <script type="text/javascript" src="_static/js/theme.js"></script>
 
     
-
-  
-  <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
-  <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
     <link rel="next" title="Optimization Objective" href="objective.html" />
@@ -50,7 +51,7 @@
           
 
           
-            <a href="index.html" class="icon icon-home"> edbo
+            <a href="index.html" class="icon icon-home" alt="Documentation Home"> edbo
           
 
           
@@ -73,6 +74,7 @@
           
         </div>
 
+        
         <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
           
             
@@ -95,6 +97,7 @@
             
           
         </div>
+        
       </div>
     </nav>
 
@@ -133,7 +136,7 @@
 
   <ul class="wy-breadcrumbs">
     
-      <li><a href="index.html">Docs</a> &raquo;</li>
+      <li><a href="index.html" class="icon icon-home"></a> &raquo;</li>
         
           <li><a href="modules.html">Bayesian Reaction Optimization</a> &raquo;</li>
         
@@ -158,7 +161,7 @@
             
   <div class="section" id="module-edbo.bro">
 <span id="bayesian-optimization"></span><h1>Bayesian Optimization<a class="headerlink" href="#module-edbo.bro" title="Permalink to this headline">¶</a></h1>
-<dl class="class">
+<dl class="py class">
 <dt id="edbo.bro.BO">
 <em class="property">class </em><code class="sig-prename descclassname">edbo.bro.</code><code class="sig-name descname">BO</code><span class="sig-paren">(</span><em class="sig-param">results_path=None, results=Empty DataFrame Columns: [] Index: [], domain_path=None, domain=Empty DataFrame Columns: [] Index: [], exindex_path=None, exindex=Empty DataFrame Columns: [] Index: [], model=&lt;class 'edbo.models.GP_Model'&gt;, acquisition_function='EI', init_method='rand', target=-1, batch_size=5, duplicate_experiments=False, gpu=False, fast_comp=False, noise_constraint=1e-05, matern_nu=2.5, lengthscale_prior=[GammaPrior(), 5.0], outputscale_prior=[GammaPrior(), 8.0], noise_prior=[GammaPrior(), 1.0], computational_objective=None</em><span class="sig-paren">)</span><a class="headerlink" href="#edbo.bro.BO" title="Permalink to this definition">¶</a></dt>
 <dd><p>Main method for calling Bayesian optimization algorithm.</p>
@@ -167,7 +170,7 @@ conditions for the parallel optimization of chemical reactions
 and for the simulation of known objectives. The algorithm is
 implemented on a user defined grid of domain points and is
 flexible to any numerical encoding.</p>
-<dl class="method">
+<dl class="py method">
 <dt id="edbo.bro.BO.__init__">
 <code class="sig-name descname">__init__</code><span class="sig-paren">(</span><em class="sig-param">results_path=None, results=Empty DataFrame Columns: [] Index: [], domain_path=None, domain=Empty DataFrame Columns: [] Index: [], exindex_path=None, exindex=Empty DataFrame Columns: [] Index: [], model=&lt;class 'edbo.models.GP_Model'&gt;, acquisition_function='EI', init_method='rand', target=-1, batch_size=5, duplicate_experiments=False, gpu=False, fast_comp=False, noise_constraint=1e-05, matern_nu=2.5, lengthscale_prior=[GammaPrior(), 5.0], outputscale_prior=[GammaPrior(), 8.0], noise_prior=[GammaPrior(), 1.0], computational_objective=None</em><span class="sig-paren">)</span><a class="headerlink" href="#edbo.bro.BO.__init__" title="Permalink to this definition">¶</a></dt>
 <dd><p>Experimental results, experimental domain, and experiment index of
@@ -224,9 +227,9 @@ present in results.</p></li>
 </dl>
 </dd></dl>
 
-<dl class="method">
+<dl class="py method">
 <dt id="edbo.bro.BO.init_sample">
-<code class="sig-name descname">init_sample</code><span class="sig-paren">(</span><em class="sig-param">seed=None</em>, <em class="sig-param">append=False</em>, <em class="sig-param">export_path=None</em><span class="sig-paren">)</span><a class="headerlink" href="#edbo.bro.BO.init_sample" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">init_sample</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">seed</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">append</span><span class="o">=</span><span class="default_value">False</span></em>, <em class="sig-param"><span class="n">export_path</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">visualize</span><span class="o">=</span><span class="default_value">False</span></em><span class="sig-paren">)</span><a class="headerlink" href="#edbo.bro.BO.init_sample" title="Permalink to this definition">¶</a></dt>
 <dd><p>Generate initial samples via an initialization method.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
@@ -236,6 +239,9 @@ present in results.</p></li>
 index are available.</p></li>
 <li><p><strong>export_path</strong> (<em>str</em>) – Path to export SVG of clustering results if pam or kmeans methods
 are used for selecting initial points.</p></li>
+<li><p><strong>visualize</strong> (<em>bool</em>) – If initialization method is set to ‘pam’ or ‘kmeans’ and visualize
+is set to True then a 2D embedding of the clustering results will
+be generated.</p></li>
 </ul>
 </dd>
 <dt class="field-even">Returns</dt>
@@ -247,9 +253,9 @@ are used for selecting initial points.</p></li>
 </dl>
 </dd></dl>
 
-<dl class="method">
+<dl class="py method">
 <dt id="edbo.bro.BO.run">
-<code class="sig-name descname">run</code><span class="sig-paren">(</span><em class="sig-param">append=False</em>, <em class="sig-param">n_restarts=0</em>, <em class="sig-param">learning_rate=0.1</em>, <em class="sig-param">training_iters=100</em><span class="sig-paren">)</span><a class="headerlink" href="#edbo.bro.BO.run" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">run</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">append</span><span class="o">=</span><span class="default_value">False</span></em>, <em class="sig-param"><span class="n">n_restarts</span><span class="o">=</span><span class="default_value">0</span></em>, <em class="sig-param"><span class="n">learning_rate</span><span class="o">=</span><span class="default_value">0.1</span></em>, <em class="sig-param"><span class="n">training_iters</span><span class="o">=</span><span class="default_value">100</span></em><span class="sig-paren">)</span><a class="headerlink" href="#edbo.bro.BO.run" title="Permalink to this definition">¶</a></dt>
 <dd><p>Run a single iteration of optimization with known results.</p>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
@@ -275,9 +281,9 @@ parameters.</p></li>
 </dl>
 </dd></dl>
 
-<dl class="method">
+<dl class="py method">
 <dt id="edbo.bro.BO.simulate">
-<code class="sig-name descname">simulate</code><span class="sig-paren">(</span><em class="sig-param">iterations=1</em>, <em class="sig-param">seed=None</em>, <em class="sig-param">update_priors=False</em>, <em class="sig-param">n_restarts=0</em>, <em class="sig-param">learning_rate=0.1</em>, <em class="sig-param">training_iters=100</em><span class="sig-paren">)</span><a class="headerlink" href="#edbo.bro.BO.simulate" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">simulate</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">iterations</span><span class="o">=</span><span class="default_value">1</span></em>, <em class="sig-param"><span class="n">seed</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">update_priors</span><span class="o">=</span><span class="default_value">False</span></em>, <em class="sig-param"><span class="n">n_restarts</span><span class="o">=</span><span class="default_value">0</span></em>, <em class="sig-param"><span class="n">learning_rate</span><span class="o">=</span><span class="default_value">0.1</span></em>, <em class="sig-param"><span class="n">training_iters</span><span class="o">=</span><span class="default_value">100</span></em><span class="sig-paren">)</span><a class="headerlink" href="#edbo.bro.BO.simulate" title="Permalink to this definition">¶</a></dt>
 <dd><p>Run autonomous BO loop.</p>
 <p>Run N iterations of optimization with initial results obtained
 via initialization method and experiments selected from
@@ -304,7 +310,7 @@ values for step N.</p></li>
 </dl>
 </dd></dl>
 
-<dl class="method">
+<dl class="py method">
 <dt id="edbo.bro.BO.clear_results">
 <code class="sig-name descname">clear_results</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#edbo.bro.BO.clear_results" title="Permalink to this definition">¶</a></dt>
 <dd><p>Clear results manually.</p>
@@ -314,9 +320,9 @@ values for step N.</p></li>
 </div>
 </dd></dl>
 
-<dl class="method">
+<dl class="py method">
 <dt id="edbo.bro.BO.plot_convergence">
-<code class="sig-name descname">plot_convergence</code><span class="sig-paren">(</span><em class="sig-param">export_path=None</em><span class="sig-paren">)</span><a class="headerlink" href="#edbo.bro.BO.plot_convergence" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">plot_convergence</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">export_path</span><span class="o">=</span><span class="default_value">None</span></em><span class="sig-paren">)</span><a class="headerlink" href="#edbo.bro.BO.plot_convergence" title="Permalink to this definition">¶</a></dt>
 <dd><p>Plot optimizer convergence.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
@@ -331,7 +337,7 @@ values for step N.</p></li>
 </dl>
 </dd></dl>
 
-<dl class="method">
+<dl class="py method">
 <dt id="edbo.bro.BO.acquisition_summary">
 <code class="sig-name descname">acquisition_summary</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#edbo.bro.BO.acquisition_summary" title="Permalink to this definition">¶</a></dt>
 <dd><p>Summarize predicted mean and variance for porposed points.</p>
@@ -345,15 +351,15 @@ values for step N.</p></li>
 </dl>
 </dd></dl>
 
-<dl class="method">
+<dl class="py method">
 <dt id="edbo.bro.BO.best">
 <code class="sig-name descname">best</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#edbo.bro.BO.best" title="Permalink to this definition">¶</a></dt>
 <dd><p>Best observed objective values and corresponding domain point.</p>
 </dd></dl>
 
-<dl class="method">
+<dl class="py method">
 <dt id="edbo.bro.BO.save">
-<code class="sig-name descname">save</code><span class="sig-paren">(</span><em class="sig-param">path='BO.pkl'</em><span class="sig-paren">)</span><a class="headerlink" href="#edbo.bro.BO.save" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">save</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">path</span><span class="o">=</span><span class="default_value">'BO.pkl'</span></em><span class="sig-paren">)</span><a class="headerlink" href="#edbo.bro.BO.save" title="Permalink to this definition">¶</a></dt>
 <dd><p>Save BO state.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
@@ -368,9 +374,9 @@ values for step N.</p></li>
 </dl>
 </dd></dl>
 
-<dl class="method">
+<dl class="py method">
 <dt id="edbo.bro.BO.load">
-<code class="sig-name descname">load</code><span class="sig-paren">(</span><em class="sig-param">path='BO.pkl'</em><span class="sig-paren">)</span><a class="headerlink" href="#edbo.bro.BO.load" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">load</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">path</span><span class="o">=</span><span class="default_value">'BO.pkl'</span></em><span class="sig-paren">)</span><a class="headerlink" href="#edbo.bro.BO.load" title="Permalink to this definition">¶</a></dt>
 <dd><p>Load BO state.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
@@ -387,9 +393,9 @@ values for step N.</p></li>
 
 </dd></dl>
 
-<dl class="class">
+<dl class="py class">
 <dt id="edbo.bro.BO_express">
-<em class="property">class </em><code class="sig-prename descclassname">edbo.bro.</code><code class="sig-name descname">BO_express</code><span class="sig-paren">(</span><em class="sig-param">reaction_components={}</em>, <em class="sig-param">encoding={}</em>, <em class="sig-param">model=&lt;class 'edbo.models.GP_Model'&gt;</em>, <em class="sig-param">acquisition_function='EI'</em>, <em class="sig-param">init_method='rand'</em>, <em class="sig-param">target=-1</em>, <em class="sig-param">batch_size=5</em>, <em class="sig-param">computational_objective=None</em><span class="sig-paren">)</span><a class="headerlink" href="#edbo.bro.BO_express" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><code class="sig-prename descclassname">edbo.bro.</code><code class="sig-name descname">BO_express</code><span class="sig-paren">(</span><em class="sig-param">reaction_components={}</em>, <em class="sig-param">encoding={}</em>, <em class="sig-param">descriptor_matrices={}</em>, <em class="sig-param">model=&lt;class 'edbo.models.GP_Model'&gt;</em>, <em class="sig-param">acquisition_function='EI'</em>, <em class="sig-param">init_method='rand'</em>, <em class="sig-param">target=-1</em>, <em class="sig-param">batch_size=5</em>, <em class="sig-param">computational_objective=None</em><span class="sig-paren">)</span><a class="headerlink" href="#edbo.bro.BO_express" title="Permalink to this definition">¶</a></dt>
 <dd><p>Quick method for auto-generating a reaction space, encoding, and BO.</p>
 <p>Class provides a unified framework for defining reaction spaces, encoding
 reacitons, selecting experimental conditions for the parallel optimization
@@ -417,7 +423,8 @@ an edbo bot to help with tasks.</p>
                <span class="s1">&#39;CC(C)c1cc(C(C)C)c(c(c1)C(C)C)c2ccccc2P(C3CCCCC3)C4CCCCC4&#39;</span> <span class="c1"># X-Phos</span>
                <span class="p">],</span>
     <span class="s1">&#39;concentration&#39;</span><span class="p">:[</span><span class="mf">0.1</span><span class="p">,</span> <span class="mf">0.2</span><span class="p">,</span> <span class="mf">0.3</span><span class="p">],</span>
-    <span class="s1">&#39;temperature&#39;</span><span class="p">:</span> <span class="p">[</span><span class="mi">20</span><span class="p">,</span> <span class="mi">30</span><span class="p">,</span> <span class="mi">40</span><span class="p">]}</span>
+    <span class="s1">&#39;temperature&#39;</span><span class="p">:</span> <span class="p">[</span><span class="mi">20</span><span class="p">,</span> <span class="mi">30</span><span class="p">,</span> <span class="mi">40</span><span class="p">],</span>
+    <span class="s1">&#39;additive&#39;</span><span class="p">:</span> <span class="s1">&#39;&lt;defined in descriptor_matrices&gt;&#39;</span><span class="p">}</span>
 
 <span class="c1"># (2) Define a dictionary of desired encodings</span>
 <span class="n">encoding</span><span class="o">=</span><span class="p">{</span><span class="s1">&#39;aryl_halide&#39;</span><span class="p">:</span><span class="s1">&#39;resolve&#39;</span><span class="p">,</span>
@@ -427,17 +434,27 @@ an edbo bot to help with tasks.</p>
           <span class="s1">&#39;concentration&#39;</span><span class="p">:</span><span class="s1">&#39;numeric&#39;</span><span class="p">,</span>
           <span class="s1">&#39;temperature&#39;</span><span class="p">:</span><span class="s1">&#39;numeric&#39;</span><span class="p">}</span>
 
-<span class="c1"># (3) Instatiate BO_express</span>
+<span class="c1"># (3) Add any user define descriptor matrices directly</span>
+<span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
+
+<span class="n">A</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span>
+         <span class="p">[[</span><span class="s1">&#39;a1&#39;</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="mi">3</span><span class="p">,</span><span class="mi">4</span><span class="p">],[</span><span class="s1">&#39;a2&#39;</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">5</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="mi">0</span><span class="p">],[</span><span class="s1">&#39;a3&#39;</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span><span class="mi">5</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">25</span><span class="p">]],</span>
+         <span class="n">columns</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;additive&#39;</span><span class="p">,</span> <span class="s1">&#39;A_des1&#39;</span><span class="p">,</span> <span class="s1">&#39;A_des2&#39;</span><span class="p">,</span> <span class="s1">&#39;A_des3&#39;</span><span class="p">,</span> <span class="s1">&#39;A_des4&#39;</span><span class="p">])</span>
+
+<span class="n">descriptor_matrices</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;additive&#39;</span><span class="p">:</span> <span class="n">A</span><span class="p">}</span>
+
+<span class="c1"># (4) Instatiate BO_express</span>
 <span class="n">bo</span> <span class="o">=</span> <span class="n">BO_express</span><span class="p">(</span><span class="n">reaction_components</span><span class="o">=</span><span class="n">reaction_components</span><span class="p">,</span>
                 <span class="n">encoding</span><span class="o">=</span><span class="n">encoding</span><span class="p">,</span>
+                <span class="n">descriptor_matrices</span><span class="o">=</span><span class="n">descriptor_matrices</span><span class="p">,</span>
                 <span class="n">batch_size</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span>
                 <span class="n">acquisition_function</span><span class="o">=</span><span class="s1">&#39;TS&#39;</span><span class="p">,</span>
                 <span class="n">target</span><span class="o">=</span><span class="s1">&#39;yield&#39;</span><span class="p">)</span>
 </pre></div>
 </div>
-<dl class="method">
+<dl class="py method">
 <dt id="edbo.bro.BO_express.__init__">
-<code class="sig-name descname">__init__</code><span class="sig-paren">(</span><em class="sig-param">reaction_components={}</em>, <em class="sig-param">encoding={}</em>, <em class="sig-param">model=&lt;class 'edbo.models.GP_Model'&gt;</em>, <em class="sig-param">acquisition_function='EI'</em>, <em class="sig-param">init_method='rand'</em>, <em class="sig-param">target=-1</em>, <em class="sig-param">batch_size=5</em>, <em class="sig-param">computational_objective=None</em><span class="sig-paren">)</span><a class="headerlink" href="#edbo.bro.BO_express.__init__" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">__init__</code><span class="sig-paren">(</span><em class="sig-param">reaction_components={}</em>, <em class="sig-param">encoding={}</em>, <em class="sig-param">descriptor_matrices={}</em>, <em class="sig-param">model=&lt;class 'edbo.models.GP_Model'&gt;</em>, <em class="sig-param">acquisition_function='EI'</em>, <em class="sig-param">init_method='rand'</em>, <em class="sig-param">target=-1</em>, <em class="sig-param">batch_size=5</em>, <em class="sig-param">computational_objective=None</em><span class="sig-paren">)</span><a class="headerlink" href="#edbo.bro.BO_express.__init__" title="Permalink to this definition">¶</a></dt>
 <dd><dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
@@ -453,6 +470,11 @@ an edbo bot to help with tasks.</p>
 </div>
 <p>Components can be specified as: (1) arbitrary names, (2) chemical
 names or nicknames, (3) SMILES strings, or (4) numeric values.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>A reaction component will not be encoded unless its key is present
+in the reaction_components dictionary.</p>
+</div>
 </p></li>
 <li><p><strong>encodings</strong> (<em>dict</em>) – <p>Dictionary of encodings with keys corresponding to reaction_components.
 Encoding dictionary has the form:</p>
@@ -471,6 +493,33 @@ one-hot-encode, (‘smiles’) compute Mordred descriptors using a smiles
 string, (‘numeric’) numerical reaction parameters are used as passed.
 If no encoding is specified, the space will be automatically
 one-hot-encoded.</p>
+</p></li>
+<li><p><strong>descriptor_matrices</strong> (<em>dict</em>) – <p>Dictionary of descriptor matrices where keys correspond to
+reaction_components and values are pandas.DataFrames.</p>
+<p>Descriptor dictionary has the form:</p>
+<p class="rubric">Example</p>
+<p>User defined descriptor matrices</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="c1"># DataFrame where the first column is the identifier (e.g., a SMILES string)</span>
+
+<span class="n">A</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">([</span><span class="o">....</span><span class="p">],</span> <span class="n">columns</span><span class="o">=</span><span class="p">[</span><span class="o">...</span><span class="p">])</span>
+
+<span class="o">--------------------------------------------</span>
+  <span class="n">A_SMILES</span>  <span class="o">|</span>  <span class="n">des1</span>  <span class="o">|</span>  <span class="n">des2</span>  <span class="o">|</span> <span class="n">des3</span> <span class="o">|</span> <span class="o">...</span>
+<span class="o">--------------------------------------------</span>
+      <span class="o">.</span>         <span class="o">.</span>        <span class="o">.</span>       <span class="o">.</span>     <span class="o">...</span>
+      <span class="o">.</span>         <span class="o">.</span>        <span class="o">.</span>       <span class="o">.</span>     <span class="o">...</span>
+<span class="o">--------------------------------------------</span>
+
+<span class="c1"># Dictionary of descriptor matrices defined as DataFrames</span>
+
+<span class="n">descriptor_matrices</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;A&#39;</span><span class="p">:</span> <span class="n">A</span><span class="p">}</span>
+</pre></div>
+</div>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>If a key is present in both encoding and descriptor_matrices then
+the descriptor matrix will take precedence.</p>
+</div>
 </p></li>
 <li><p><strong>model</strong> (<em>edbo.models</em>) – Surrogate model object used for Bayesian optimization.
 See edbo.models for predefined models and specification of custom
@@ -499,9 +548,9 @@ functions.</p></li>
 </dl>
 </dd></dl>
 
-<dl class="method">
+<dl class="py method">
 <dt id="edbo.bro.BO_express.get_experiments">
-<code class="sig-name descname">get_experiments</code><span class="sig-paren">(</span><em class="sig-param">structures=False</em><span class="sig-paren">)</span><a class="headerlink" href="#edbo.bro.BO_express.get_experiments" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">get_experiments</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">structures</span><span class="o">=</span><span class="default_value">False</span></em><span class="sig-paren">)</span><a class="headerlink" href="#edbo.bro.BO_express.get_experiments" title="Permalink to this definition">¶</a></dt>
 <dd><p>Return indexed experiments proposed by Bayesian optimization algorithm.</p>
 <p>edbo.BO works directly with a standardized encoded reaction space. This
 method returns proposed experiments as the origional smiles strings,
@@ -520,9 +569,9 @@ encoded smiles strings.</p>
 </dl>
 </dd></dl>
 
-<dl class="method">
+<dl class="py method">
 <dt id="edbo.bro.BO_express.add_results">
-<code class="sig-name descname">add_results</code><span class="sig-paren">(</span><em class="sig-param">results_path=None</em><span class="sig-paren">)</span><a class="headerlink" href="#edbo.bro.BO_express.add_results" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">add_results</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">results_path</span><span class="o">=</span><span class="default_value">None</span></em><span class="sig-paren">)</span><a class="headerlink" href="#edbo.bro.BO_express.add_results" title="Permalink to this definition">¶</a></dt>
 <dd><p>Add experimental results.</p>
 <p>Experimental results should be added with the same column headings as
 those returned by BO_express.get_experiments. If a path to the results
@@ -545,9 +594,9 @@ CSV file with the proper format.</p>
 </dl>
 </dd></dl>
 
-<dl class="method">
+<dl class="py method">
 <dt id="edbo.bro.BO_express.export_proposed">
-<code class="sig-name descname">export_proposed</code><span class="sig-paren">(</span><em class="sig-param">path=None</em><span class="sig-paren">)</span><a class="headerlink" href="#edbo.bro.BO_express.export_proposed" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">export_proposed</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">path</span><span class="o">=</span><span class="default_value">None</span></em><span class="sig-paren">)</span><a class="headerlink" href="#edbo.bro.BO_express.export_proposed" title="Permalink to this definition">¶</a></dt>
 <dd><p>Export proposed experiments.</p>
 <p>edbo.BO works directly with a standardized encoded reaction space. This
 method exports proposed experiments as the origional smiles strings,
@@ -567,7 +616,7 @@ the current working directory.</p>
 </dl>
 </dd></dl>
 
-<dl class="method">
+<dl class="py method">
 <dt id="edbo.bro.BO_express.help">
 <code class="sig-name descname">help</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#edbo.bro.BO_express.help" title="Permalink to this definition">¶</a></dt>
 <dd><p>Spawn an edbo bot to help with tasks.</p>
@@ -605,11 +654,19 @@ for use later, and exporting proposed experiments to a CSV file.</p>
 
   <div role="contentinfo">
     <p>
+        
         &copy; Copyright 2020, Benjamin J. Shields
 
     </p>
   </div>
-  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+    
+    
+    
+    Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a
+    
+    <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a>
+    
+    provided by <a href="https://readthedocs.org">Read the Docs</a>. 
 
 </footer>
 
@@ -620,7 +677,6 @@ for use later, and exporting proposed experiments to a CSV file.</p>
 
   </div>
   
-
 
   <script type="text/javascript">
       jQuery(function () {

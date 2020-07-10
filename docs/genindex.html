@@ -1,9 +1,7 @@
 
 
-
 <!DOCTYPE html>
-<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
-<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<html class="writer-html5" lang="en" >
 <head>
   <meta charset="utf-8">
   
@@ -13,27 +11,29 @@
   
 
   
+  <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+
+  
   
   
   
 
   
-  <script type="text/javascript" src="_static/js/modernizr.min.js"></script>
+  <!--[if lt IE 9]>
+    <script src="_static/js/html5shiv.min.js"></script>
+  <![endif]-->
   
     
       <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
-        <script type="text/javascript" src="_static/jquery.js"></script>
-        <script type="text/javascript" src="_static/underscore.js"></script>
-        <script type="text/javascript" src="_static/doctools.js"></script>
-        <script type="text/javascript" src="_static/language_data.js"></script>
+        <script src="_static/jquery.js"></script>
+        <script src="_static/underscore.js"></script>
+        <script src="_static/doctools.js"></script>
+        <script src="_static/language_data.js"></script>
     
     <script type="text/javascript" src="_static/js/theme.js"></script>
 
     
-
-  
-  <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
-  <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
     <link rel="index" title="Index" href="#" />
     <link rel="search" title="Search" href="search.html" /> 
 </head>
@@ -49,7 +49,7 @@
           
 
           
-            <a href="index.html" class="icon icon-home"> edbo
+            <a href="index.html" class="icon icon-home" alt="Documentation Home"> edbo
           
 
           
@@ -72,6 +72,7 @@
           
         </div>
 
+        
         <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
           
             
@@ -87,6 +88,7 @@
             
           
         </div>
+        
       </div>
     </nav>
 
@@ -125,7 +127,7 @@
 
   <ul class="wy-breadcrumbs">
     
-      <li><a href="index.html">Docs</a> &raquo;</li>
+      <li><a href="index.html" class="icon icon-home"></a> &raquo;</li>
         
       <li>Index</li>
     
@@ -258,18 +260,43 @@
 <h2 id="E">E</h2>
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="acq_func.html#module-edbo.acq_func">edbo.acq_func (module)</a>
+      <li>
+    edbo.acq_func
+
+      <ul>
+        <li><a href="acq_func.html#module-edbo.acq_func">module</a>
 </li>
-      <li><a href="bro.html#module-edbo.bro">edbo.bro (module)</a>
+      </ul></li>
+      <li>
+    edbo.bro
+
+      <ul>
+        <li><a href="bro.html#module-edbo.bro">module</a>
 </li>
-      <li><a href="init_scheme.html#module-edbo.init_scheme">edbo.init_scheme (module)</a>
+      </ul></li>
+      <li>
+    edbo.init_scheme
+
+      <ul>
+        <li><a href="init_scheme.html#module-edbo.init_scheme">module</a>
 </li>
-      <li><a href="models.html#module-edbo.models">edbo.models (module)</a>
+      </ul></li>
+      <li>
+    edbo.models
+
+      <ul>
+        <li><a href="models.html#module-edbo.models">module</a>
 </li>
-      <li><a href="objective.html#module-edbo.objective">edbo.objective (module)</a>
-</li>
+      </ul></li>
   </ul></td>
   <td style="width: 33%; vertical-align: top;"><ul>
+      <li>
+    edbo.objective
+
+      <ul>
+        <li><a href="objective.html#module-edbo.objective">module</a>
+</li>
+      </ul></li>
       <li><a href="acq_func.html#edbo.acq_func.eps_greedy">eps_greedy (class in edbo.acq_func)</a>
 </li>
       <li><a href="acq_func.html#edbo.acq_func.acquisition.evaluate">evaluate() (edbo.acq_func.acquisition method)</a>
@@ -362,12 +389,25 @@
   <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="acq_func.html#edbo.acq_func.max_variance">max_variance (class in edbo.acq_func)</a>
 </li>
-  </ul></td>
-  <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="acq_func.html#edbo.acq_func.mean">mean() (in module edbo.acq_func)</a>
 </li>
       <li><a href="models.html#edbo.models.GP_Model.mle">mle() (edbo.models.GP_Model method)</a>
 </li>
+      <li>
+    module
+
+      <ul>
+        <li><a href="acq_func.html#module-edbo.acq_func">edbo.acq_func</a>
+</li>
+        <li><a href="bro.html#module-edbo.bro">edbo.bro</a>
+</li>
+        <li><a href="init_scheme.html#module-edbo.init_scheme">edbo.init_scheme</a>
+</li>
+        <li><a href="models.html#module-edbo.models">edbo.models</a>
+</li>
+        <li><a href="objective.html#module-edbo.objective">edbo.objective</a>
+</li>
+      </ul></li>
   </ul></td>
 </tr></table>
 
@@ -517,11 +557,19 @@
 
   <div role="contentinfo">
     <p>
+        
         &copy; Copyright 2020, Benjamin J. Shields
 
     </p>
   </div>
-  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+    
+    
+    
+    Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a
+    
+    <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a>
+    
+    provided by <a href="https://readthedocs.org">Read the Docs</a>. 
 
 </footer>
 
@@ -532,7 +580,6 @@
 
   </div>
   
-
 
   <script type="text/javascript">
       jQuery(function () {
