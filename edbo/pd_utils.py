@@ -111,12 +111,43 @@ def torch_to_numpy(data, gpu=False):
 
 # Complement of two dataframes
 
+#def complement(df1, df2, rounding=False, boolean_out=False):
+#    """
+#    Complement of two dataframes. Remove elements of df2 in df1.
+#    Retains indices of df1. There must be a better way to do this
+#    but pandas was either slow or didn't properly remove
+#    duplicates.
+#    """
+#    
+#    df1 = df1.copy()
+#    df2 = df2.copy().reset_index(drop=True)
+#    
+#    if rounding != False:
+#        df1 = df1.round(decimals=rounding)
+#        df2 = df2.round(decimals=rounding)
+#        
+#    np1 = np.array(df1)
+#    np2 = np.array(df2)
+#    
+#    boolean = []
+#    for i in range(len(np1)):
+#        boolean_i = True
+#        if boolean.count(False) < len(np2):
+#            for j in range(len(np2)):
+#                if list(np1[i]) == list(np2[j]):
+#                    boolean_i = False
+#                    break
+#        boolean.append(boolean_i)
+#    
+#    if boolean_out == True:
+#        return boolean
+#    else:
+#        return df1[boolean]
+
 def complement(df1, df2, rounding=False, boolean_out=False):
     """
     Complement of two dataframes. Remove elements of df2 in df1.
-    Retains indices of df1. There must be a better way to do this
-    but pandas was either slow or didn't properly remove
-    duplicates.
+    Retains indices of df1.
     """
     
     df1 = df1.copy()
@@ -125,24 +156,16 @@ def complement(df1, df2, rounding=False, boolean_out=False):
     if rounding != False:
         df1 = df1.round(decimals=rounding)
         df2 = df2.round(decimals=rounding)
-        
-    np1 = np.array(df1)
-    np2 = np.array(df2)
     
-    boolean = []
-    for i in range(len(np1)):
-        boolean_i = True
-        if boolean.count(False) < len(np2):
-            for j in range(len(np2)):
-                if list(np1[i]) == list(np2[j]):
-                    boolean_i = False
-                    break
-        boolean.append(boolean_i)
-    
+    df1_comp_df2 = pd.concat([df1, df2]).drop_duplicates(keep=False)
+       
     if boolean_out == True:
+        index1 = df1.index.values
+        indexc = df1_comp_df2.index.values
+        boolean = list(np.isin(index1, indexc))
         return boolean
     else:
-        return df1[boolean]
+        return df1_comp_df2
 
 # Sampling
 
