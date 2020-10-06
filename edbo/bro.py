@@ -632,9 +632,9 @@ class BO_express(BO):
         
         # low D priors
         if len(self.reaction.data.columns.values) < 5:
-            lengthscale_prior = [GammaPrior(1.3, 0.5), 0.5]
-            outputscale_prior = [GammaPrior(5.0, 0.2), 20.0]
-            noise_prior = [GammaPrior(1.5, 0.1), 5.0]
+            lengthscale_prior = [GammaPrior(1.2, 1.1), 0.2]
+            outputscale_prior = [GammaPrior(5.0, 0.5), 8.0]
+            noise_prior = [GammaPrior(1.05, 0.5), 0.1]
         # DFT optimized priors or LS and OS
         elif mordred and len(self.reaction.data.columns.values) < 100:
             lengthscale_prior = [GammaPrior(2.0, 0.2), 5.0]
@@ -737,6 +737,9 @@ class BO_express(BO):
         
         result_descriptors = self.obj.domain.iloc[results.index.values]
         results = pd.concat([result_descriptors, results.iloc[:,[-1]]], axis=1)
+        
+        if len(self.obj.results) > 0:
+            results = pd.concat([self.obj.results_input(), results])
         
         # Initialize data container
         self.obj = objective(domain=self.obj.domain,
