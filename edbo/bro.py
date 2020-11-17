@@ -605,15 +605,12 @@ class BO_express(BO):
         
         # Initialize edbo_bot
         self.edbo_bot = bot()
-        self.edbo_bot.talk('For help try BO_express.help() or see the documentation page.')
         
         # Check the input
         if len(reaction_components) > 0:
             N = 1
             for key in reaction_components:
                 N *= len(reaction_components[key])
-            
-            self.edbo_bot.talk('Building reaction space...')
 
         # Build the search space (clean, decorrelate, standardize)
         self.reaction = reaction_space(reaction_components, 
