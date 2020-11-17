@@ -1,5 +1,0 @@
-electrophile_SMILES,electrophile=O=S(OC1=CC=C(N=CC=C2)C2=C1)(C(F)(F)F)=O,electrophile=ClC1=CC=C(N=CC=C2)C2=C1,electrophile=BrC1=CC=C(N=CC=C2)C2=C1,electrophile=IC1=CC=C(N=CC=C2)C2=C1
-O=S(OC1=CC=C(N=CC=C2)C2=C1)(C(F)(F)F)=O,1,0,0,0
-ClC1=CC=C(N=CC=C2)C2=C1,0,1,0,0
-BrC1=CC=C(N=CC=C2)C2=C1,0,0,1,0
-IC1=CC=C(N=CC=C2)C2=C1,0,0,0,1

@@ -1,5 +1,0 @@
-base_SMILES,base=O=C([O-])C.[K+],base=O=C([O-])C(C)(C)C.[K+],base=O=C([O-])C.[Cs+],base=O=C([O-])C(C)(C)C.[Cs+]
-O=C([O-])C.[K+],1,0,0,0
-O=C([O-])C(C)(C)C.[K+],0,1,0,0
-O=C([O-])C.[Cs+],0,0,1,0
-O=C([O-])C(C)(C)C.[Cs+],0,0,0,1

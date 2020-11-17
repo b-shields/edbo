@@ -1,6 +1,0 @@
-solvent_file_name,solvent_SMILES
-solvent_1,O=CN(C)C
-solvent_2,O=S(C)C
-solvent_3,CC1=CC=CC=C1
-solvent_4,FC(C1=CC=CC=C1)(F)F
-solvent_5,C1CCOC1

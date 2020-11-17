@@ -1,7 +1,0 @@
-azadicarboxylate_file_name,azadicarboxylate_SMILES
-azadicarboxylate_1,CC(C)(OC(/N=N/C(OC(C)(C)C)=O)=O)C
-azadicarboxylate_2,CC(OC(/N=N/C(OC(C)C)=O)=O)C
-azadicarboxylate_3,ClC1=CC=C(COC(/N=N/C(OCC2=CC=C(Cl)C=C2)=O)=O)C=C1
-azadicarboxylate_4,O=C(OCC1=CC=CC=C1)/N=N/C(OCC2=CC=CC=C2)=O
-azadicarboxylate_5,O=C(N1CCCCC1)/N=N/C(N2CCCCC2)=O
-azadicarboxylate_6,CN(C(/N=N/C(N(C)C)=O)=O)C
