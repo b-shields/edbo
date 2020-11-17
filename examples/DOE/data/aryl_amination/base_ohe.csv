@@ -1,0 +1,4 @@
+base_SMILES,base=CN(C)P(N(C)C)(N(C)C)=NP(N(C)C)(N(C)C)=NCC,base=CN(C)/C(N(C)C)=N\C(C)(C)C,base=CN1CCCN2CCCN=C12
+CN(C)P(N(C)C)(N(C)C)=NP(N(C)C)(N(C)C)=NCC,1,0,0
+CN(C)/C(N(C)C)=N\C(C)(C)C,0,1,0
+CN1CCCN2CCCN=C12,0,0,1

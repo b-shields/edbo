@@ -1,0 +1,6 @@
+,sulfonyl_fluoride_SMILES_index,base_SMILES_index,solvent_SMILES_index,substrate_concentration_index,sulfonyl_equiv_index,base_equiv_index,temperature_index,yield
+311374,O=S(C1=CC=C(C)C=C1)(F)=O,CC(C)(C)N=P(N1CCCC1)(N2CCCC2)N3CCCC3,FC(C1=CC=CC=C1)(F)F,0.1,1.9,1.9,60,4
+285649,O=S(C1=CC=C(C)C=C1)(F)=O,N12CCCN=C1NCCC2,CC1=CC=CC=C1,0.1,1.1,1.9,60,23
+120649,O=S(C1=CC=CC=N1)(F)=O,CN1C2=NCCCN2CCC1,FC(C1=CC=CC=C1)(F)F,0.1,1.1,1.9,60,17
+286850,O=S(C1=CC=C(C)C=C1)(F)=O,N12CCCN=C1NCCC2,FC(C1=CC=CC=C1)(F)F,0.5,1.9,1.1,20,11
+292504,O=S(C1=CC=C(C)C=C1)(F)=O,CN(/C(N(C)C)=N\C(C)(C)C)C,FC(C1=CC=CC=C1)(F)F,0.1,1.1,1.1,60,4

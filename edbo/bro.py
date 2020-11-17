@@ -635,7 +635,7 @@ class BO_express(BO):
             lengthscale_prior = [GammaPrior(1.2, 1.1), 0.2]
             outputscale_prior = [GammaPrior(5.0, 0.5), 8.0]
             noise_prior = [GammaPrior(1.05, 0.5), 0.1]
-        # DFT optimized priors or LS and OS
+        # DFT optimized priors
         elif mordred and len(self.reaction.data.columns.values) < 100:
             lengthscale_prior = [GammaPrior(2.0, 0.2), 5.0]
             outputscale_prior = [GammaPrior(5.0, 0.5), 8.0]

@@ -1,0 +1,16 @@
+aryl_halide_SMILES,aryl_halide=FC(F)(F)c1ccc(Cl)cc1,aryl_halide=FC(F)(F)c1ccc(Br)cc1,aryl_halide=FC(F)(F)c1ccc(I)cc1,aryl_halide=COc1ccc(Cl)cc1,aryl_halide=COc1ccc(Br)cc1,aryl_halide=COc1ccc(I)cc1,aryl_halide=CCc1ccc(Cl)cc1,aryl_halide=CCc1ccc(Br)cc1,aryl_halide=CCc1ccc(I)cc1,aryl_halide=Clc1ccccn1,aryl_halide=Brc1ccccn1,aryl_halide=Ic1ccccn1,aryl_halide=Clc1cccnc1,aryl_halide=Brc1cccnc1,aryl_halide=Ic1cccnc1
+FC(F)(F)c1ccc(Cl)cc1,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0
+FC(F)(F)c1ccc(Br)cc1,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0
+FC(F)(F)c1ccc(I)cc1,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0
+COc1ccc(Cl)cc1,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0
+COc1ccc(Br)cc1,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0
+COc1ccc(I)cc1,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0
+CCc1ccc(Cl)cc1,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0
+CCc1ccc(Br)cc1,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0
+CCc1ccc(I)cc1,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0
+Clc1ccccn1,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0
+Brc1ccccn1,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0
+Ic1ccccn1,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0
+Clc1cccnc1,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0
+Brc1cccnc1,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0
+Ic1cccnc1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1

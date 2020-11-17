@@ -1,0 +1,5 @@
+Base,Base_SMILES,Base_SMILES_mapped-cdx,Base_SMILES_mapped,Base_anion_SMILES,Base_anion_SMILES_mapped-cdx,Base_anion_SMILES_mapped,Conjugate_acid_SMILES,Conjugate_acid_SMILES_mapped-cdx,Conjugate_acid_SMILES_mapped,Base_cation
+KOAc,O=C([O-])C.[K+],[3O]=[2C]([1O-])C.[K+],[O:3]=[C:2]([O-:1])C.[K+],O=C([O-])C,[3O]=[2C]([1O-])C,[O:3]=[C:2]([O-:1])C,O=C(O)C,[3O]=[2C]([1OH])C,[O:3]=[C:2]([OH:1])C,[K+]
+KOPiv,O=C([O-])C(C)(C)C.[K+],[3O]=[2C]([1O-])C(C)(C)C.[K+],[O:3]=[C:2]([O-:1])C(C)(C)C.[K+],O=C([O-])C(C)(C)C,[3O]=[2C]([1O-])C(C)(C)C,[O:3]=[C:2]([O-:1])C(C)(C)C,O=C(O)C(C)(C)C,[3O]=[2C]([1OH])C(C)(C)C,[O:3]=[C:2]([OH:1])C(C)(C)C,[K+]
+CsOAc,O=C([O-])C.[Cs+],[3O]=[2C]([1O-])C.[Cs+],[O:3]=[C:2]([O-:1])C.[Cs+],O=C([O-])C,[3O]=[2C]([1O-])C,[O:3]=[C:2]([O-:1])C,O=C(O)C,[3O]=[2C]([1OH])C,[O:3]=[C:2]([OH:1])C,[Cs+]
+CsOPiv,O=C([O-])C(C)(C)C.[Cs+],[3O]=[2C]([1O-])C(C)(C)C.[Cs+],[O:3]=[C:2]([O-:1])C(C)(C)C.[Cs+],O=C([O-])C(C)(C)C,[3O]=[2C]([1O-])C(C)(C)C,[O:3]=[C:2]([O-:1])C(C)(C)C,O=C(O)C(C)(C)C,[3O]=[2C]([1OH])C(C)(C)C,[O:3]=[C:2]([OH:1])C(C)(C)C,[Cs+]

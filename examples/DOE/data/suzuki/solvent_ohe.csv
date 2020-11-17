@@ -1,0 +1,5 @@
+solvent_SMILES,solvent=CO,solvent=C1COCC1,solvent=N#CC,solvent=O=CN(C)C
+CO,1,0,0,0
+C1COCC1,0,1,0,0
+N#CC,0,0,1,0
+O=CN(C)C,0,0,0,1
