@@ -26,8 +26,8 @@ setup(
     ],
    classifiers=[
     'Development Status :: 3 - Alpha',
-    'Intended Audience :: Chemists', 
-    'Topic :: Bayesian Optimization :: Chemistry',
+    'Intended Audience :: Science/Research', 
+    'Topic :: Scientific/Engineering :: Chemistry',
     'License :: OSI Approved :: MIT License', 
     'Programming Language :: Python :: 3.7',
   ],
