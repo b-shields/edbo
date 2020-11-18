@@ -7,7 +7,7 @@ setup(
    author='Benjamin J. Shields',
    author_email='shields.benjamin.j@gmail.com',
    url='https://github.com/b-shields/edbo',
-   download_url = 'https://github.com/b-shields/edbo/archive/v_010.tar.gz',
+   download_url = 'https://github.com/b-shields/edbo/archive/edbo.tar.gz',
    keywords=['Bayesian Optimization', 'Chemical Reaction Optimization'],
    license='MIT',
    description='Experimental design via Bayesian optimization',
