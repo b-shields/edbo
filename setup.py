@@ -1,21 +1,34 @@
-from setuptools import setup, find_packages
+from setuptools import setup
 
 setup(
    name='edbo',
-   version='0.0.0',
-   author='Ben Shields',
-   packages=find_packages(),
-   url='https://github.com/b-shields/edbo.git',
-   license='LICENSE',
+   packages=['edbo'], 
+   version='0.1.0',
+   author='Benjamin J. Shields',
+   author_email='shields.benjamin.j@gmail.com',
+   url='https://github.com/b-shields/edbo',
+   download_url = 'https://github.com/b-shields/edbo/archive/edbo.tar.gz',
+   keywords=['Bayesian Optimization', 'Chemical Reaction Optimization'],
+   license='MIT',
    description='Experimental design via Bayesian optimization',
    install_requires=[
-        'pandas==0.25.3',
-        'numpy==1.17.4',
-        'pytorch==1.3.1',
+        'pandas',
+        'numpy',
+        'xlrd',
         'scikit-learn>=0.22.1',
         'matplotlib',
         'seaborn',
+        'dill',
         'gpytorch==1.0.0',
-        'pyclustering==0.9.3.1'
-    ]
+        'pyclustering==0.9.3.1',
+        'pyro-ppl==1.1',
+        'ipython', ###
+    ],
+   classifiers=[
+    'Development Status :: 3 - Alpha',
+    'Intended Audience :: Chemists', 
+    'Topic :: Bayesian Optimization :: Chemistry',
+    'License :: OSI Approved :: MIT License', 
+    'Programming Language :: Python :: 3.7',
+  ],
 )

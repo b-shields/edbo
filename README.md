@@ -1,5 +1,6 @@
 # edbo
-Experimental Design via Bayesian Optimization: *edbo* is a practical implimentaiton of Bayesian optimization for chemical synthesis.
+
+Experimental Design via Bayesian Optimization: *edbo* is a practical implementation of Bayesian optimization for chemical synthesis.
 
 **Reference:** Shields, Benjamin J.; Stevens, Jason; Li, Jun; Parasram, Marvin; Damani, Farhan, Janey, Jacob; Adams, Ryan P.; Doyle, Abigail G. "Bayesian Reaction Optimization as A Tool for Chemical Synthesis" Manuscript Submitted.
 
@@ -7,26 +8,35 @@ Experimental Design via Bayesian Optimization: *edbo* is a practical implimentai
 
 ## Installation
 
-**Requirements:**
-- anaconda
-- an internet connecton
-- a copy of install.sh
+(0) Create anaconda environment
 
-0. Install conda (if you haven't already):
-
-```bash
-https://docs.conda.io/projects/conda/en/latest/user-guide/install/
+```
+conda create --name edbo python=3.7.5
 ```
 
-1. Copy install.sh to desired directory (or just copy text into a new text file called install.sh):
+(1) Install rdkit, Mordred, and PyTorch
 
-2. Open a terminal (linux) or anaconda prompt (windows), navigate to the directory containing install.sh:
-
-```bash
-cd path/to/install.sh/directory
-sh install.sh
-
-# Note: if OS is Linux based you may need to chmod + install.sh
+```
+conda activate edbo
+conda install -c rdkit rdkit
+conda install -c rdkit -c mordred-descriptor mordred
+conda install -c pytorch pytorch=1.3.1
 ```
 
-3. (optional) Test edbo. See tests directory for details.
+(2) Install EDBO
+
+```
+pip install edbo
+```
+
+### Running Notebooks
+
+```
+conda install jupyterlab
+```
+
+### GPU Integration
+
+```
+conda install cudatookit=10.1, torchvision -c pytorch
+```
