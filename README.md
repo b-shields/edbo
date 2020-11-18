@@ -14,17 +14,25 @@ Experimental Design via Bayesian Optimization: *edbo* is a practical implementat
 conda create --name edbo python=3.7.5
 ```
 
-(1) Install rdkit and Mordred
+(1) Install rdkit, Mordred, and PyTorch
 
 ```
+conda activate edbo
 conda install -c rdkit rdkit
 conda install -c rdkit -c mordred-descriptor mordred
+conda install -c pytorch pytorch=1.3.1
 ```
 
 (2) Install EDBO
 
 ```
 pip install edbo
+```
+
+### Running Notebooks
+
+```
+conda install jupyterlab
 ```
 
 ### GPU Integration

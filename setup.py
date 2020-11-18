@@ -1,4 +1,4 @@
-from setuptools import setup, find_packages
+from setuptools import setup
 
 setup(
    name='edbo',
@@ -6,7 +6,6 @@ setup(
    version='0.1.0',
    author='Benjamin J. Shields',
    author_email='shields.benjamin.j@gmail.com',
-   packages=find_packages(),
    url='https://github.com/b-shields/edbo',
    download_url = 'https://github.com/b-shields/edbo/archive/v_010.tar.gz',
    keywords=['Bayesian Optimization', 'Chemical Reaction Optimization'],
@@ -16,14 +15,14 @@ setup(
         'pandas',
         'numpy',
         'xlrd',
-        'torch==1.3.1',
         'scikit-learn>=0.22.1',
         'matplotlib',
         'seaborn',
         'dill',
         'gpytorch==1.0.0',
         'pyclustering==0.9.3.1',
-        'pyro-ppl==1.1'
+        'pyro-ppl==1.1',
+        'ipython', ###
     ],
    classifiers=[
     'Development Status :: 3 - Alpha',
