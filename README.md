@@ -2,7 +2,7 @@
 
 Experimental Design via Bayesian Optimization: *edbo* is a practical implementation of Bayesian optimization for chemical synthesis.
 
-**Reference:** Shields, Benjamin J.; Stevens, Jason; Li, Jun; Parasram, Marvin; Damani, Farhan, Janey, Jacob; Adams, Ryan P.; Doyle, Abigail G. "Bayesian Reaction Optimization as A Tool for Chemical Synthesis" Manuscript Submitted.
+**Reference:** Shields, Benjamin J.; Stevens, Jason; Li, Jun; Parasram, Marvin; Damani, Farhan, Janey, Jacob; Adams, Ryan P.; Doyle, Abigail G. "Bayesian Reaction Optimization as A Tool for Chemical Synthesis" Manuscript Accepted.
 
 **Documentation:** https://b-shields.github.io/edbo/index.html
 
@@ -33,10 +33,4 @@ pip install edbo
 
 ```
 conda install jupyterlab
-```
-
-### GPU Integration
-
-```
-conda install cudatookit=10.1, torchvision -c pytorch
 ```
