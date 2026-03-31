@@ -1,0 +1,61 @@
+[tool.poetry]
+name = "edbo"
+version = "0.1.0"
+description = "Experimental Design via Bayesian Optimization for chemical synthesis"
+authors = ["Benjamin J. Shields"]
+readme = "README.md"
+license = "MIT"
+packages = [{include = "edbo", from = "src"}]
+keywords = ["Bayesian Optimization", "Chemical Reaction Optimization", "Experimental Design"]
+classifiers = [
+    "Development Status :: 4 - Beta",
+    "Intended Audience :: Science/Research",
+    "Topic :: Scientific/Engineering :: Chemistry",
+    "License :: OSI Approved :: MIT License",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+]
+
+[tool.poetry.dependencies]
+python = "^3.10"
+pandas = ">=2.0,<3"
+numpy = ">=1.26,<3"
+scipy = ">=1.12,<2"
+scikit-learn = ">=1.5,<2"
+matplotlib = ">=3.9,<4"
+seaborn = ">=0.13,<1"
+gpytorch = ">=1.13,<2"
+linear-operator = ">=0.5,<1"
+torch = ">=2.4,<3"
+dill = ">=0.3,<1"
+
+[tool.poetry.group.dev.dependencies]
+pytest = "^8.0"
+pytest-cov = "^6.0"
+ruff = "^0.4"
+mypy = "^1.10"
+pre-commit = "^4.0"
+
+[tool.poetry.group.docs.dependencies]
+mkdocs-material = "^9.0"
+mkdocstrings = {extras = ["python"], version = "^0.27"}
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
+
+[tool.ruff]
+line-length = 88
+
+[tool.ruff.lint]
+select = ["E", "F", "I", "W"]
+
+[tool.mypy]
+python_version = "3.10"
+warn_return_any = true
+warn_unused_configs = true
+ignore_missing_imports = true
+
+[tool.pytest.ini_options]
+markers = ["slow: marks tests as slow (deselect with '-m \"not slow\"')"]
